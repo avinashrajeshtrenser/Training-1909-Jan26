@@ -1,5 +1,10 @@
 #pragma once
-class StaffMenu
+#include <iostream>
+#include "Menu.h"
+class StaffMenu : public Menu
 {
+public:
+	void showMenu() override;
+	void handleOperation(int choice) override;
 };
 
