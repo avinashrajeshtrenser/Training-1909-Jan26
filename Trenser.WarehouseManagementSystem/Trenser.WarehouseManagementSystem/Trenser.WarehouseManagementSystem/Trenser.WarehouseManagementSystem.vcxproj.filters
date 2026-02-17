@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Models">
+      <UniqueIdentifier>{e5e315f1-2cad-4939-b57d-7e337cfbc59e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Utility">
+      <UniqueIdentifier>{4dd14d19-a4d4-40bb-ae7c-60ddf424febc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files">
+      <UniqueIdentifier>{a4175ee6-c9ac-474d-be7f-86edd352f528}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Trenser.WarehouseManagementSystem.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="WarehouseController.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Admin.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="AdminMenu.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Delivery.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="DeliveryItem.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="FileManager.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
+    <ClCompile Include="Manager.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="ManagerMenu.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Menu.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Product.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="QualityCheck.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Staff.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="StaffMenu.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Store.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="User.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+    <ClCompile Include="Vehicle.cpp">
+      <Filter>Models</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="WarehouseController.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Admin.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="AdminMenu.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Delivery.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="DeliveryItem.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Manager.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="ManagerMenu.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Menu.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Product.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="QualityCheck.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Staff.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="StaffMenu.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Store.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="User.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="Vehicle.h">
+      <Filter>Models</Filter>
+    </ClInclude>
+    <ClInclude Include="FileManager.h">
+      <Filter>Utility</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
