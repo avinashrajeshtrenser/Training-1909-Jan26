@@ -41,8 +41,11 @@
         void removeProduct(int productId);
         void dispatchProduct();
         void listProducts() const;
-        void acceptDelivery(const Delivery& delivery);
+        void listVehicles() const;
         void listDeliveries() const;
+        void listDispatchPendingItems() const;
+        void listStores() const;
+        void acceptDelivery(const Delivery& delivery);
         void loadSystem();
         void saveSystem();
     };

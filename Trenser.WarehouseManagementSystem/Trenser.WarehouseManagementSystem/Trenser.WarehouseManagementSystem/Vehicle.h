@@ -10,9 +10,9 @@ private:
 public:
 	Vehicle() : m_vehicleId(0), m_driverName(""), m_capacity(0), m_isAvailable(false) {}
 	Vehicle(int vehicleId, std::string driverName, int capacity, bool isAvailable) : m_vehicleId(vehicleId), m_driverName(driverName), m_capacity(capacity), m_isAvailable(isAvailable) {}
-	int getVehicleId();
-	int getcapacity();
-	std::string getdriverName();
-	bool getIsAvailable();
+	int getVehicleId() const;
+	int getcapacity() const;
+	std::string getdriverName() const;
+	bool getIsAvailable() const;
 };
 

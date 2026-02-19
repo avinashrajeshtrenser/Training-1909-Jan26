@@ -10,14 +10,6 @@ void WarehouseController::controllerMenu()
 		cout << "1. Register\n2. Login\n3. Exit\n\nEnter the choice : ";
 		cin >> choice;
 		string username, password, role;
-		/*if (choice == 1)
-		{
-			addUser();
-		}
-		if (choice == 2)
-		{
-			loginUser();
-		}*/
 		switch (choice)
 		{
 		case 1: addUser();
@@ -25,7 +17,7 @@ void WarehouseController::controllerMenu()
 		case 2: loginUser();
 			break;
 		case 3: exit(0);
-		default: "Invalid Input. Try again";
+		default: cout << "Invalid Input. Try again\n";
 		}
 	} while (choice != 3);
 }
@@ -149,7 +141,7 @@ void WarehouseController::addStore()
 		}
 	}
 	m_stores.push_back(newStore);
-	cout << "Store '" << storeId << "' added successfully.\n";
+	cout << "Store '" << storeName << "' added successfully.\n";
 }
 
 void WarehouseController::addProduct()
@@ -175,13 +167,15 @@ void WarehouseController::addProduct()
 	}
 	Product newProduct(productId, productName, stockQuantity, qualityScore);
 	m_products.push_back(newProduct);
-	cout << "Vehicle '" << productId << "' added successfully.\n";
+	cout << "Product '" << productName << "' added successfully.\n";
 }
 void WarehouseController::dispatchProduct()
 {
 	int productId, storeId, quantity;
+	listProducts();
 	cout << "Enter the Product Id: ";
 	cin >> productId;
+	listStores();
 	cout << "Enter the Store Id: ";
 	cin >> storeId;
 	cout << "Enter the Quantity: ";
@@ -203,6 +197,72 @@ void WarehouseController::dispatchProduct()
 		}
 	}
 	cout << "Error: Product '" << productId << "' not found.\n";
+}
+void WarehouseController::listProducts() const
+{
+	if (m_products.empty())
+	{
+		std::cout << "No products available in the warehouse.\n";
+		return;
+	}
+	std::cout << "\n--- Product List ---\n";
+	for (auto it = m_products.begin(); it != m_products.end(); ++it)
+	{
+		std::cout << "Product ID: " << it->getProductId()
+			<< "| Name: " << it->getProductName()
+			<< "| Stock: " << it->getStockQuantity()
+			<< "| Quality Score: " << it->getQualityScore()
+			<< "| Status: " << it->getStatus() << "\n";
+	}
+}
+void WarehouseController::listVehicles() const
+{
+	if (m_vehicles.empty())
+	{
+		std::cout << "No vehicles available.\n";
+		return;
+	}
+	std::cout << "--- Vehicle List ---\n";
+	for (auto it = m_vehicles.begin(); it != m_vehicles.end(); ++it)
+	{
+		std::cout << "Vehicle ID: " << it->getVehicleId()
+			<< "| Driver: " << it->getdriverName()
+			<< "| Capacity: " << it->getcapacity()
+			<< "| Available: " << (it->getIsAvailable() ? "Yes" : "No") << "\n";
+	}
+}
+void WarehouseController::listStores() const
+{
+	if (m_stores.empty())
+	{
+		std::cout << "No stores registered.\n";
+		return;
+	}
+	std::cout << "--- Store List ---\n";
+	for (auto it = m_stores.begin(); it != m_stores.end(); ++it)
+	{
+		std::cout << "Store ID: " << it->getStoreId()
+			<< "| Name: " << it->getStoreName()
+			<< "| Location: " << it->getStoreLocation() << "\n";
+	}
+}
+void WarehouseController::listDispatchPendingItems() const
+{
+	if (m_dispatchPendingProduct.empty())
+	{
+		std::cout << "No items pending to dispatch.\n";
+		return;
+	}
+	std::cout << "--- Dispatch Pending Items ---\n";
+	for (auto it = m_dispatchPendingProduct.begin(); it != m_dispatchPendingProduct.end(); ++it)
+	{
+		const Product& product = it->getProduct();
+		std::cout << "Product ID: " << product.getProductId()
+			<< "| Name: " << product.getProductName()
+			<< "| Quantity: " << it->getQuantity()
+			<< "| Quality Score: " << product.getQualityScore()
+			<< "| Status: " << product.getStatus() << "\n";
+	}
 }
 void WarehouseController::performQualityCheck()
 {

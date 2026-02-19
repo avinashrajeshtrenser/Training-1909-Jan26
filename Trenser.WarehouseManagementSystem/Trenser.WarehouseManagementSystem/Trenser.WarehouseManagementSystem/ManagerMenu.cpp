@@ -1,3 +1,4 @@
+#include "WarehouseController.h"
 #include "ManagerMenu.h"
 using namespace std;
 
@@ -22,18 +23,28 @@ void ManagerMenu::handleOperation(WarehouseController& controller)
         cout << endl;
         switch (choice)
         {
-        case 1: cout << "Adding product...\n";
+        case 1: controller.addProduct();
             break;
-        case 2: cout << "Adding vehicle...\n";
+        case 2: controller.addVehicle();
             break;
-        case 3: cout << "Adding store...\n";
+        case 3: controller.addStore();
             break;
-        case 4: cout << "Dispatching delivery...\n";
+        case 4: controller.dispatchProduct();
             break;
-        case 5: cout << "Logging out...\n";
+        case 5: controller.listProducts();
+            break;
+        case 6: controller.listStores();
+            break;
+        case 7: controller.listVehicles();
+            break;
+        case 8: controller.listDispatchPendingItems();
+            break;
+        case 9: /*controller.listDeliveries();*/
+            break;
+        case 10: cout << "Logging out...\n";
             break;
         default: cout << "Invalid choice.\n";
             break;
         }
-    } while (choice != 5);
+    } while (choice != 10);
 }

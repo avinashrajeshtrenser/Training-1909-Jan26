@@ -10,8 +10,13 @@ void AdminMenu::showMenu()
     cout << "4. Add Store\n";
     cout << "5. Dispatch Delivery\n";
     cout << "6. Perform Quality Check\n";
-    cout << "7. Update Delivery Status\n";
-    cout << "8. Logout\n";
+    cout << "7. List Products\n";
+    cout << "8. List Stores\n";
+    cout << "9. List Vehicles\n";
+    cout << "10. List Pending Dispatch\n";
+    cout << "11. List Deliveries\n";
+    cout << "12. Update Delivery Status\n";
+    cout << "13. Logout\n";
 }
 void AdminMenu::handleOperation(WarehouseController& controller)
 {
@@ -26,22 +31,32 @@ void AdminMenu::handleOperation(WarehouseController& controller)
         {
         case 1: controller.addUser(); 
             break;
-        case 2: cout << "Adding product...\n";
+        case 2: controller.addProduct();
             break;
         case 3: controller.addVehicle();
             break;
-        case 4: cout << "Adding store...\n";
+        case 4: controller.addStore();
             break;
-        case 5: cout << "Dispatching delivery...\n";
+        case 5: controller.dispatchProduct();
             break;
-        case 6: cout << "Performing quality check...\n";
+        case 6: controller.performQualityCheck();
             break;
-        case 7: cout << "Updating delivery status...\n";
+        case 7: controller.listProducts();
             break;
-        case 8: cout << "Logging out\n";
+        case 8: controller.listStores();
+            break;
+        case 9: controller.listVehicles();
+            break;
+        case 10: controller.listDispatchPendingItems();
+            break;
+        case 11: /*controller.listDeliveries();*/
+            break;
+        case 12: cout << "Updating delivery status...\n";
+            break;
+        case 13: cout << "Logging out\n";
             break;
         default: cout << "Invalid choice.\n";
             break;
         }
-    } while (choice != 8);
+    } while (choice != 13);
 }

@@ -1,3 +1,4 @@
+#include "WarehouseController.h"
 #include "StaffMenu.h"
 using namespace std;
 void StaffMenu::showMenu()
@@ -19,16 +20,26 @@ void StaffMenu::handleOperation(WarehouseController& controller)
         cout << endl;
         switch (choice)
         {
-        case 1: cout << "Performing quality check...\n";
+        case 1: controller.performQualityCheck();
             break;
         case 2: cout << "Updating delivery status...\n";
             break;
         case 3: cout << "Accepting delivery task...\n";
             break;
-        case 4: cout << "Logging out...\n";
+        case 4: controller.listProducts();
+            break;
+        case 5: controller.listStores();
+            break;
+        case 6: controller.listVehicles();
+            break;
+        case 7: controller.listDispatchPendingItems();
+            break;
+        case 8: /*controller.listDeliveries();*/
+            break;
+        case 9: cout << "Logging out...\n";
             break;
         default: cout << "Invalid choice.\n";
             break;
         }
-    } while (choice != 4);
+    } while (choice != 9);
 }

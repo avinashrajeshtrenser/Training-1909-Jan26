@@ -1,25 +1,25 @@
 using namespace std;
 #include "Product.h"
 
-int Product::getProductId()
+int Product::getProductId() const
 {
     return m_productId;
 }
-int Product::getStockQuantity()
+int Product::getStockQuantity() const
 {
     return m_stockQuantity;
 }
-int Product::getQualityScore()
+int Product::getQualityScore() const
 {
     return m_qualityScore;
 }
 
-string Product::getproductName()
+string Product::getProductName() const
 {
     return m_productName;
 }
 
-std::string Product::getStatus()
+std::string Product::getStatus() const
 {
     return m_status;
 }
