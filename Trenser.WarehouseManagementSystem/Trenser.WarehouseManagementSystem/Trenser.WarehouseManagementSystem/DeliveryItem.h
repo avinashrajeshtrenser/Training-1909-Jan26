@@ -10,5 +10,6 @@ public:
 	DeliveryItem() : m_quantity(0), m_product() {}
 	DeliveryItem(int quantity, Product product) : m_quantity(quantity), m_product(product) {}
 	Product getProduct();
+	int getQuantity();
 };
 

@@ -20,6 +20,8 @@
         std::vector<Delivery> m_deliveries;
         std::vector<Vehicle> m_vehicles;
         std::vector<Store> m_stores;
+        std::vector<DeliveryItem> m_dispatchPendingProduct;
+        std::vector<DeliveryItem> m_damagedProducts;
         QualityCheck m_qualityCheck;
         std::vector<User> m_users;
         User m_autherizedUser;
@@ -35,8 +37,9 @@
         void addVehicle();
         void addStore();
         void addProduct();
+        void performQualityCheck();
         void removeProduct(int productId);
-        void dispatchProduct(int productId, int storeId);
+        void dispatchProduct();
         void listProducts() const;
         void acceptDelivery(const Delivery& delivery);
         void listDeliveries() const;

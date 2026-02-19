@@ -9,7 +9,7 @@ void WarehouseController::controllerMenu()
 		cout << "\n=========WareHouse Management===========\n";
 		cout << "1. Register\n2. Login\n3. Exit\n\nEnter the choice : ";
 		cin >> choice;
-		std::string username, password, role;
+		string username, password, role;
 		/*if (choice == 1)
 		{
 			addUser();
@@ -30,7 +30,7 @@ void WarehouseController::controllerMenu()
 	} while (choice != 3);
 }
 
-bool WarehouseController::authorizeUser(const std::string& username, const std::string& password)
+bool WarehouseController::authorizeUser(const string& username, const string& password)
 {
 	for (auto it = m_users.begin(); it != m_users.end(); ++it)
 	{
@@ -45,7 +45,7 @@ bool WarehouseController::authorizeUser(const std::string& username, const std::
 
 void WarehouseController::loginUser()
 {
-	std::string username, password, role;
+	string username, password, role;
 	cout << "Username : ";
 	cin >> username;
 	cout << "Password : ";
@@ -83,7 +83,7 @@ void WarehouseController::loginUser()
 
 void WarehouseController::addUser()
 {
-	std::string username, password, role;
+	string username, password, role;
 	cout << "Enter the Username : ";
 	cin >> username;
 	cout << "Enter Password : ";
@@ -95,18 +95,18 @@ void WarehouseController::addUser()
 	{
 		if (it->getUserName() == username)
 		{
-			std::cout << "Error: Username '" << username << "' already exists.\n";
+			cout << "Error: Username '" << username << "' already exists.\n";
 			return;
 		}
 	}
 	m_users.push_back(newUser);
-	std::cout << "User '" << username << "' registered successfully.\n";
+	cout << "User '" << username << "' registered successfully.\n";
 }
 
 void WarehouseController::addVehicle()
 {
 	int vehicleId, capacity;
-	std::string driverName;
+	string driverName;
 	bool isAvailable;
 	cout << "Enter the Vehicle Id : ";
 	cin >> vehicleId;
@@ -121,12 +121,12 @@ void WarehouseController::addVehicle()
 	{
 		if (it->getVehicleId() == vehicleId)
 		{
-			std::cout << "Error: Vehicle '" << vehicleId << "' already exists.\n";
+			cout << "Error: Vehicle '" << vehicleId << "' already exists.\n";
 			return;
 		}
 	}
 	m_vehicles.push_back(newVehicle);
-	std::cout << "Vehicle '" << vehicleId << "' added successfully.\n";
+	cout << "Vehicle '" << vehicleId << "' added successfully.\n";
 }
 
 void WarehouseController::addStore()
@@ -144,18 +144,18 @@ void WarehouseController::addStore()
 	{
 		if (it->getStoreId() == storeId)
 		{
-			std::cout << "Error: Store '" << storeId << "' already exists.\n";
+			cout << "Error: Store '" << storeId << "' already exists.\n";
 			return;
 		}
 	}
 	m_stores.push_back(newStore);
-	std::cout << "Store '" << storeId << "' added successfully.\n";
+	cout << "Store '" << storeId << "' added successfully.\n";
 }
 
 void WarehouseController::addProduct()
 {
 	int productId, qualityScore, stockQuantity;
-	std::string productName;
+	string productName;
 	cout << "Enter the Product Id : ";
 	cin >> productId;
 	cout << "Enter the Product Name : ";
@@ -168,12 +168,64 @@ void WarehouseController::addProduct()
 	{
 		if (it->getProductId() == productId)
 		{
-			it->updateStockIncrease(stockQuantity);
-			std::cout << "Product '" << productId << "' already exists. Stock updated.\n";
+			it->updateStock(stockQuantity);
+			cout << "Product '" << productId << "' already exists. Stock updated.\n";
 			return;
 		}
 	}
 	Product newProduct(productId, productName, stockQuantity, qualityScore);
 	m_products.push_back(newProduct);
-	std::cout << "Vehicle '" << productId << "' added successfully.\n";
+	cout << "Vehicle '" << productId << "' added successfully.\n";
 }
+void WarehouseController::dispatchProduct()
+{
+	int productId, storeId, quantity;
+	cout << "Enter the Product Id: ";
+	cin >> productId;
+	cout << "Enter the Store Id: ";
+	cin >> storeId;
+	cout << "Enter the Quantity: ";
+	cin >> quantity;
+	for (auto it = m_products.begin(); it != m_products.end(); ++it)
+	{
+		if (it->getProductId() == productId)
+		{
+			if (it->getStockQuantity() < quantity)
+			{
+				cout << "Error: Not enough stock for Product '" << productId << "'.\n";
+				return;
+			}
+			it->updateStock(-quantity);
+			DeliveryItem item(quantity, *it);
+			m_dispatchPendingProduct.push_back(item);
+			cout << "Product '" << productId << "' queued for quality check before dispatch to Store '" << storeId << "'.\n";
+			return;
+		}
+	}
+	cout << "Error: Product '" << productId << "' not found.\n";
+}
+void WarehouseController::performQualityCheck()
+{
+	if (m_dispatchPendingProduct.empty())
+	{
+		cout << "No items pending quality check.\n";
+		return;
+	}
+	for (auto it = m_dispatchPendingProduct.begin(); it != m_dispatchPendingProduct.end(); )
+	{
+		Product product = it->getProduct();
+		if (product.getQualityScore() >= m_qualityCheck.getThreshold())
+		{
+			product.updateStatus("Approved");
+			++it;
+		}
+		else
+		{
+			product.updateStatus("Damaged");
+			m_damagedProducts.push_back(*it);
+			it = m_dispatchPendingProduct.erase(it);
+		}
+	}
+}
+
+

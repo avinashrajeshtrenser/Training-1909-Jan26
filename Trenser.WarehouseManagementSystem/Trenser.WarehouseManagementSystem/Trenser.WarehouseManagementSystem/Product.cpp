@@ -24,7 +24,7 @@ std::string Product::getStatus()
     return m_status;
 }
 
-void Product::updateStockIncrease(int quantity)
+void Product::updateStock(int quantity)
 {
     m_stockQuantity += quantity;
 }

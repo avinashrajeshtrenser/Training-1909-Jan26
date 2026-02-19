@@ -16,7 +16,7 @@ public:
 	int getQualityScore();
 	std::string getproductName();
 	std::string getStatus();
-	void updateStockIncrease(int quantity);
+	void updateStock(int quantity);
 	void updateStatus(std::string status);
 };
 
