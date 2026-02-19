@@ -30,9 +30,9 @@
         WarehouseController() : m_menu(nullptr) {};
         void controllerMenu();
         bool authorizeUser(const std::string& username, const std::string& password);
+        void loginUser();
         void addUser();
-        /*void addUser(User& user);*/
-        void addVehicle(const Vehicle& vehicle);
+        void addVehicle();
         void addStore(const Store& store);
         void addProduct(const Product& product);
         void removeProduct(int productId);
