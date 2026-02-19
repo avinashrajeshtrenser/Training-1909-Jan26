@@ -11,7 +11,7 @@ void ManagerMenu::showMenu()
     cout << "5. Logout\n";
 }
 
-void ManagerMenu::handleOperation()
+void ManagerMenu::handleOperation(WarehouseController& controller)
 {
     int choice;
     do

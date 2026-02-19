@@ -6,9 +6,9 @@ void StaffMenu::showMenu()
     cout << "1. Perform Quality Check\n";
     cout << "2. Update Delivery Status\n";
     cout << "3. Accept Delivery Task\n";
-    cout << "4. Exit\n";
+    cout << "4. Logout\n";
 }
-void StaffMenu::handleOperation()
+void StaffMenu::handleOperation(WarehouseController& controller)
 {
     int choice;
     do
@@ -25,7 +25,7 @@ void StaffMenu::handleOperation()
             break;
         case 3: cout << "Accepting delivery task...\n";
             break;
-        case 4: cout << "Exiting Staff Menu...\n";
+        case 4: cout << "Logging out...\n";
             break;
         default: cout << "Invalid choice.\n";
             break;

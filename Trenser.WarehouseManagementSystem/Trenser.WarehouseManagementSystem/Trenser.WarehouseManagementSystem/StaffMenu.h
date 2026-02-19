@@ -5,6 +5,6 @@ class StaffMenu : public Menu
 {
 public:
 	void showMenu() override;
-	void handleOperation() override;
+	void handleOperation(WarehouseController&) override;
 };
 

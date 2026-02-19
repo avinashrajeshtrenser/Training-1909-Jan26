@@ -1,18 +1,19 @@
+#include "WarehouseController.h"
 #include "AdminMenu.h"
 using namespace std;
 void AdminMenu::showMenu()
 {
     cout << "\n=== Admin Menu ===\n";
-    cout << "1. Add User (Admin/Manager/Staff)\n";
+    cout << "1. Add User (Manager/Staff)\n";
     cout << "2. Add Product\n";
     cout << "3. Add Vehicle\n";
     cout << "4. Add Store\n";
     cout << "5. Dispatch Delivery\n";
     cout << "6. Perform Quality Check\n";
     cout << "7. Update Delivery Status\n";
-    cout << "8. Exit\n";
+    cout << "8. Logout\n";
 }
-void AdminMenu::handleOperation()
+void AdminMenu::handleOperation(WarehouseController& controller)
 {
     int choice;
     do
@@ -23,7 +24,7 @@ void AdminMenu::handleOperation()
         cout << endl;
         switch (choice)
         {
-        case 1: cout << "Adding user...\n"; 
+        case 1: controller.addUser(); 
             break;
         case 2: cout << "Adding product...\n";
             break;
@@ -37,7 +38,7 @@ void AdminMenu::handleOperation()
             break;
         case 7: cout << "Updating delivery status...\n";
             break;
-        case 8: cout << "Exiting Admin Menu...\n";
+        case 8: cout << "Logging out\n";
             break;
         default: cout << "Invalid choice.\n";
             break;
