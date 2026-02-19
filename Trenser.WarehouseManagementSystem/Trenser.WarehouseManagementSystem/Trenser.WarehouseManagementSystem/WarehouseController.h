@@ -33,8 +33,8 @@
         void loginUser();
         void addUser();
         void addVehicle();
-        void addStore(const Store& store);
-        void addProduct(const Product& product);
+        void addStore();
+        void addProduct();
         void removeProduct(int productId);
         void dispatchProduct(int productId, int storeId);
         void listProducts() const;

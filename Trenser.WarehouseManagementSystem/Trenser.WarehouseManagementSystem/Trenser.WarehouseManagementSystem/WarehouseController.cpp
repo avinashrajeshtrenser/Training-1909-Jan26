@@ -128,3 +128,29 @@ void WarehouseController::addVehicle()
 	m_vehicles.push_back(newVehicle);
 	std::cout << "Vehicle '" << vehicleId << "' added successfully.\n";
 }
+
+void WarehouseController::addProduct()
+{
+	int productId, qualityScore, stockQuantity;
+	std::string productName;
+	cout << "Enter the Product Id : ";
+	cin >> productId;
+	cout << "Enter the Product Name : ";
+	cin >> productName;
+	cout << "Enter the Stock quantity : ";
+	cin >> stockQuantity;
+	cout << "Enter the Quality score : ";
+	cin >> qualityScore;
+	for (auto it = m_products.begin(); it != m_products.end(); ++it)
+	{
+		if (it->getProductId() == productId)
+		{
+			it->updateStockIncrease(stockQuantity);
+			std::cout << "Product '" << productId << "' already exists. Stock updated.\n";
+			return;
+		}
+	}
+	Product newProduct(productId, productName, stockQuantity, qualityScore);
+	m_products.push_back(newProduct);
+	std::cout << "Vehicle '" << productId << "' added successfully.\n";
+}
