@@ -28,7 +28,7 @@ void AdminMenu::handleOperation(WarehouseController& controller)
             break;
         case 2: cout << "Adding product...\n";
             break;
-        case 3: cout << "Adding vehicle...\n";
+        case 3: controller.addVehicle();
             break;
         case 4: cout << "Adding store...\n";
             break;

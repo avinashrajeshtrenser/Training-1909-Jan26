@@ -129,6 +129,29 @@ void WarehouseController::addVehicle()
 	std::cout << "Vehicle '" << vehicleId << "' added successfully.\n";
 }
 
+void WarehouseController::addStore()
+{
+	int storeId;
+	string storeName, location;
+	cout << "Enter the store ID : ";
+	cin >> storeId;
+	cout << "Enter the Store Name : ";
+	cin >> storeName;
+	cout << "Enter the Store Location : ";
+	cin >> location;
+	Store newStore(storeId, storeName, location);
+	for (auto it = m_stores.begin(); it != m_stores.end(); ++it)
+	{
+		if (it->getStoreId() == storeId)
+		{
+			std::cout << "Error: Store '" << storeId << "' already exists.\n";
+			return;
+		}
+	}
+	m_stores.push_back(newStore);
+	std::cout << "Store '" << storeId << "' added successfully.\n";
+}
+
 void WarehouseController::addProduct()
 {
 	int productId, qualityScore, stockQuantity;
