@@ -1,15 +1,19 @@
 #pragma once
-#include <iostream>
+#include <memory>
 #include "Product.h"
-class DeliveryItem
-{
-private:
-	int m_quantity;
-	Product m_product;
-public:
-	DeliveryItem() : m_quantity(0), m_product() {}
-	DeliveryItem(int quantity, Product product) : m_quantity(quantity), m_product(product) {}
-	Product getProduct() const;
-	int getQuantity() const;
-};
+#include "Store.h"
 
+class DeliveryItem {
+private:
+    int m_quantity;
+    std::shared_ptr<Product> m_product;
+    std::shared_ptr<Store> m_store;
+public:
+    DeliveryItem() : m_quantity(0), m_product(nullptr), m_store(nullptr) {}
+    DeliveryItem(int quantity, std::shared_ptr<Product> product, std::shared_ptr<Store> store)
+        : m_quantity(quantity), m_product(product), m_store(store) {
+    }
+    std::shared_ptr<Product> getProduct() const;
+    std::shared_ptr<Store> getStore() const;
+    int getQuantity() const;
+};

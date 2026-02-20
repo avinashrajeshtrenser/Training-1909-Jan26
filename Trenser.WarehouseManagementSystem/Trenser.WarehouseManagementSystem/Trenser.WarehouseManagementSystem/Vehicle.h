@@ -14,5 +14,6 @@ public:
 	int getcapacity() const;
 	std::string getdriverName() const;
 	bool getIsAvailable() const;
+	void setIsAvailable(bool available);
 };
 

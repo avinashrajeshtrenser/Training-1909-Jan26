@@ -18,3 +18,8 @@ bool Vehicle::getIsAvailable() const
     return m_isAvailable;
 }
 
+void Vehicle::setIsAvailable(bool available)
+{
+     m_isAvailable = available;
+}
+

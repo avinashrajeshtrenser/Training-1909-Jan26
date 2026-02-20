@@ -1,10 +1,12 @@
+using namespace std;
 #include "DeliveryItem.h"
 
-Product DeliveryItem::getProduct() const
-{
-	return m_product;
+shared_ptr<Product> DeliveryItem::getProduct() const {
+    return m_product;
 }
-int DeliveryItem::getQuantity() const
-{
-	return m_quantity;
+shared_ptr<Store> DeliveryItem::getStore() const {
+    return m_store;
+}
+int DeliveryItem::getQuantity() const {
+    return m_quantity;
 }
