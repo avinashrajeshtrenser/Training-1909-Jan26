@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <string>
 class Product
 {
 private:
@@ -18,5 +19,7 @@ public:
 	std::string getStatus() const;
 	void updateStock(int quantity);
 	void updateStatus(std::string status);
+	std::string serialize() const;
+	static Product deserialize(const std::string& line);
 };
 

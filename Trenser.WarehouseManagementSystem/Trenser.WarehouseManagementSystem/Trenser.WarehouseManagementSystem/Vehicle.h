@@ -18,6 +18,7 @@ public:
 	bool getIsAvailable() const;
 	void setIsAvailable(bool available);
 	void setStatus(const std::string& status);
-	
+	std::string serialize() const;
+	static Vehicle deserialize(const std::string& line);
 };
 

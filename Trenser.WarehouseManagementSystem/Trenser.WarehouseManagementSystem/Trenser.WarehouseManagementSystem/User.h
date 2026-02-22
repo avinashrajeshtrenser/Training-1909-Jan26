@@ -17,5 +17,7 @@ public:
 	int getUserId();
 	std::string getUserStatus();
 	void updateUserStatus(std::string status);
+	std::string serialize() const;
+	static User deserialize(const std::string& line);
 };
 

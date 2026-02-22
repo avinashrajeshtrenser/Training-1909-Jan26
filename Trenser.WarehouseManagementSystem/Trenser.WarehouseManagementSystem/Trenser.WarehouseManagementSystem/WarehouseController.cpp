@@ -17,7 +17,8 @@ void WarehouseController::controllerMenu()
 			break;
 		case 2: loginUser();
 			break;
-		case 3: exit(0);
+        case 3: saveSystem();
+            cout << "Exiting.....";
 		default: cout << "Invalid Input. Try again\n";
 		}
 	} while (choice != 3);
@@ -48,6 +49,7 @@ void WarehouseController::loginUser()
 		if (m_menu != nullptr)
 		{
 			m_menu->handleOperation(*this);
+            saveSystem();
 		}
 		else
 		{
@@ -611,6 +613,26 @@ void WarehouseController::acceptDelivery()
         cout << "Delivery " << deliveryId << " created for Store " << store->getStoreLocation() << "\n";
     }
     m_dispatchPendingProduct->clear();
+}
+
+void WarehouseController::loadSystem()
+{
+    fileManager.loadVector(m_products, "products.txt");
+    fileManager.loadVector(m_vehicles, "vehicles.txt");
+    fileManager.loadVector(m_stores, "stores.txt");
+    fileManager.loadVector(m_users, "users.txt");
+
+    fileManager.loadDeliveries(m_deliveries, m_stores, m_vehicles, "deliveries.txt");
+}
+
+void WarehouseController::saveSystem()
+{
+    fileManager.saveVector(m_products, "products.txt");
+    fileManager.saveVector(m_vehicles, "vehicles.txt");
+    fileManager.saveVector(m_stores, "stores.txt");
+    fileManager.saveVector(m_users, "users.txt");
+
+    fileManager.saveDeliveries(m_deliveries, "deliveries.txt");
 }
 
 shared_ptr<vector<Product>> WarehouseController::getProducts()

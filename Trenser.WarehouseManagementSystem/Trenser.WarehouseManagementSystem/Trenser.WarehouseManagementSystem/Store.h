@@ -15,4 +15,6 @@ public:
 	std::string getStoreLocation() const;
 	std::string getStoreStatus() const;
 	void setStoreStatus(std::string status);
+	std::string serialize() const;
+	static Store deserialize(const std::string& line);
 };
