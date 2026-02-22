@@ -19,6 +19,7 @@ void WarehouseController::controllerMenu()
 			break;
         case 3: saveSystem();
             cout << "Exiting.....";
+            break;
 		default: cout << "Invalid Input. Try again\n";
 		}
 	} while (choice != 3);
@@ -125,7 +126,7 @@ void WarehouseController::addVehicle()
     bool isAvailable;
     cout << "Enter the Capacity: ";
     cin >> capacity;
-    cout << "Enter the driverName: ";
+    cout << "Enter the Driver Name: ";
     cin >> driverName;
     cout << "Is the Car Available for Delivery (yes/no): ";
     cin >> availabilityInput;
@@ -236,6 +237,10 @@ void WarehouseController::dispatchProduct()
                 return;
             }
             it->updateStock(-quantity);
+            if (it->getStockQuantity() == 0)
+            {
+                it->updateStatus("Out of Stock");
+            }
             selectedProduct = make_shared<Product>(*it); // wrap object in shared_ptr
             break;
         }
