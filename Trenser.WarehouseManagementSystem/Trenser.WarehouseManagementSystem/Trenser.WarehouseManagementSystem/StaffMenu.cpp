@@ -22,9 +22,9 @@ void StaffMenu::handleOperation(WarehouseController& controller)
         {
         case 1: controller.performQualityCheck();
             break;
-        case 2: cout << "Updating delivery status...\n";
+        case 2: controller.updateDeliveryStatus();
             break;
-        case 3: cout << "Accepting delivery task...\n";
+        case 3: controller.acceptDelivery();
             break;
         case 4: controller.listProducts();
             break;
@@ -34,7 +34,7 @@ void StaffMenu::handleOperation(WarehouseController& controller)
             break;
         case 7: controller.listDispatchPendingItems();
             break;
-        case 8: /*controller.listDeliveries();*/
+        case 8: controller.listDeliveries();
             break;
         case 9: cout << "Logging out...\n";
             break;
