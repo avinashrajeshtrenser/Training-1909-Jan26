@@ -464,12 +464,6 @@ void WarehouseController::removeProduct()
 }
 void WarehouseController::removeVehicle()
 {
-    if (m_vehicles->empty())
-    {
-        cout << "Not Vehicles to Remove\n";
-        return;
-    }
-    listVehicles();
     int vehicleId;
     cout << "Enter Vehicle ID to remove: ";
     cin >> vehicleId;
