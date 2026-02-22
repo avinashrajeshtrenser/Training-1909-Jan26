@@ -1,6 +1,7 @@
 #include <iostream>
 using namespace std;
 #include "WarehouseController.h"
+
 void WarehouseController::controllerMenu()
 {
 	int choice;
@@ -21,6 +22,7 @@ void WarehouseController::controllerMenu()
 		}
 	} while (choice != 3);
 }
+
 void WarehouseController::loginUser()
 {
 	string username, password, role;
@@ -58,6 +60,7 @@ void WarehouseController::loginUser()
 		cout << "Invalid Credentials.Try Again\n";
 	}
 }
+
 bool WarehouseController::authorizeUser(const string& username, const string& password)
 {
     for (auto it = m_users->begin(); it != m_users->end(); ++it)
@@ -70,6 +73,7 @@ bool WarehouseController::authorizeUser(const string& username, const string& pa
     }
     return false;
 }
+
 void WarehouseController::addUser()
 {
     string username, password, role;
@@ -110,6 +114,7 @@ void WarehouseController::addUser()
     m_users->push_back(newUser);
     cout << "User '" << username << "' registered successfully as " << role << ".\n";
 }
+
 void WarehouseController::addVehicle()
 {
     int capacity;
@@ -146,15 +151,13 @@ void WarehouseController::addVehicle()
     }
     Vehicle newVehicle(vehicleId, driverName, capacity, isAvailable);
     m_vehicles->push_back(newVehicle);
-
     cout << "Vehicle '" << vehicleId << "' added successfully.\n";
 }
+
 void WarehouseController::addProduct()
 {
     int productId, qualityScore, stockQuantity;
     string productName;
-    /*cout << "Enter the Product Id : ";
-    cin >> productId;*/
     cout << "Enter the Product Name : ";
     cin >> productName;
     cout << "Enter the Stock quantity : ";
@@ -175,12 +178,11 @@ void WarehouseController::addProduct()
     m_products->push_back(newProduct);
     cout << "Product '" << productName << "' added successfully.\n";
 }
+
 void WarehouseController::addStore()
 {
     int storeId;
     string storeName, location;
-    /*cout << "Enter the store ID : ";
-    cin >> storeId;*/
     cout << "Enter the Store Name : ";
     cin >> storeName;
     cout << "Enter the Store Location : ";
@@ -198,26 +200,7 @@ void WarehouseController::addStore()
     m_stores->push_back(newStore);
     cout << "Store '" << storeName << "' added successfully.\n";
 }
-void WarehouseController::listVehicles() const
-{
-    if (m_vehicles->empty())
-    {
-        cout << "No vehicles available.\n";
-        return;
-    }
-    cout << "--- Vehicle List ---\n";
-    for (auto it = m_vehicles->begin(); it != m_vehicles->end(); ++it)
-    {
-        if (it->getStatus() != "Active") 
-        {
-            continue;
-        }
-        cout << "Vehicle ID: " << it->getVehicleId()
-            << "| Driver: " << it->getdriverName()
-            << "| Capacity: " << it->getcapacity()
-            << "| Available: " << (it->getIsAvailable() ? "Yes" : "No") << "\n";
-    }
-}
+
 void WarehouseController::dispatchProduct()
 {
     int productId, storeId, quantity;
@@ -243,7 +226,7 @@ void WarehouseController::dispatchProduct()
     shared_ptr<Store> selectedStore = nullptr;
     for (auto it = m_products->begin(); it != m_products->end(); ++it) 
     {
-        if (it->getProductId() == productId)
+        if (it->getProductId() == productId && it->getStatus() != "Removed")
         {
             if (it->getStockQuantity() < quantity)
             {
@@ -262,7 +245,8 @@ void WarehouseController::dispatchProduct()
     }
     for (auto st = m_stores->begin(); st != m_stores->end(); ++st)
     {
-        if (st->getStoreId() == storeId) {
+        if (st->getStoreId() == storeId && st->getStoreStatus() != "Removed")
+        {
             selectedStore = make_shared<Store>(*st); // wrap object in shared_ptr
             break;
         }
@@ -276,6 +260,50 @@ void WarehouseController::dispatchProduct()
     m_dispatchPendingProduct->push_back(item);
     cout << "Product '" << selectedProduct->getProductName() << "' queued for quality check before dispatch to Store '" << selectedStore->getStoreName() << "'.\n";
 }
+
+void WarehouseController::listUsers() const
+{
+    if (m_users->empty())
+    {
+        cout << "No users registered.\n";
+        return;
+    }
+    cout << "--- User List ---\n";
+    for (auto it = m_users->begin(); it != m_users->end(); ++it)
+    {
+        if (it->getUserStatus() == "Removed")
+        {
+            continue;
+        }
+        cout << "User ID: " << it->getUserId()
+            << " | Username: " << it->getUserName()
+            << " | Role: " << it->getRole()
+            << " | Status: " << it->getUserStatus()
+            << "\n";
+    }
+}
+
+void WarehouseController::listVehicles() const
+{
+    if (m_vehicles->empty())
+    {
+        cout << "No vehicles available.\n";
+        return;
+    }
+    cout << "--- Vehicle List ---\n";
+    for (auto it = m_vehicles->begin(); it != m_vehicles->end(); ++it)
+    {
+        if (it->getStatus() != "Active")
+        {
+            continue;
+        }
+        cout << "Vehicle ID: " << it->getVehicleId()
+            << "| Driver: " << it->getdriverName()
+            << "| Capacity: " << it->getcapacity()
+            << "| Available: " << (it->getIsAvailable() ? "Yes" : "No") << "\n";
+    }
+}
+
 void WarehouseController::listProducts() const
 {
     if (m_products->empty())
@@ -286,6 +314,10 @@ void WarehouseController::listProducts() const
     cout << "\n--- Product List ---\n";
     for (auto it = m_products->begin(); it != m_products->end(); ++it)
     {
+        if (it->getStatus() == "Removed")
+        {
+            continue;
+        }
         cout << "Product ID: " << it->getProductId()
             << "| Name: " << it->getProductName()
             << "| Stock: " << it->getStockQuantity()
@@ -293,6 +325,7 @@ void WarehouseController::listProducts() const
             << "| Status: " << it->getStatus() << "\n";
     }
 }
+
 void WarehouseController::listStores() const
 {
     if (m_stores->empty())
@@ -303,11 +336,16 @@ void WarehouseController::listStores() const
     cout << "--- Store List ---\n";
     for (auto it = m_stores->begin(); it != m_stores->end(); ++it)
     {
+        if (it->getStoreStatus() == "Removed")
+        {
+            continue;
+        }
         cout << "Store ID: " << it->getStoreId()
             << "| Name: " << it->getStoreName()
             << "| Location: " << it->getStoreLocation() << "\n";
     }
 }
+
 void WarehouseController::updateDeliveryStatus()
 {
     int deliveryId;
@@ -350,6 +388,7 @@ void WarehouseController::updateDeliveryStatus()
     }
     cout << "Error: Delivery with ID " << deliveryId << " not found.\n";
 }
+
 void WarehouseController::listDispatchPendingItems()
 {
     if (m_dispatchPendingProduct->empty())
@@ -367,6 +406,7 @@ void WarehouseController::listDispatchPendingItems()
             << "| Status: " << product.getStatus() << "\n";
     }
 }
+
 void WarehouseController::listDeliveries() const
 {
     if (m_deliveries->empty()) {
@@ -405,6 +445,7 @@ void WarehouseController::listDeliveries() const
         cout << "-----------------------------------\n";
     }
 }
+
 void WarehouseController::performQualityCheck()
 {
     if (m_dispatchPendingProduct->empty())
@@ -428,8 +469,15 @@ void WarehouseController::performQualityCheck()
         }
     }
 }
+
 void WarehouseController::removeUser()
 {
+    if (m_users->empty())
+    {
+        cout << "No user to Remove.\n";
+        return;
+    }
+    listUsers();
     int userId;
     cout << "Enter User ID to remove: ";
     cin >> userId;
@@ -445,28 +493,35 @@ void WarehouseController::removeUser()
     }
     cout << "Error: User with ID " << userId << " not found.\n";
 }
+
 void WarehouseController::removeProduct()
 {
+    if (m_products->empty())
+    {
+        cout << "No Products to Remove.\n";
+        return;
+    }
+    listProducts();
     int productId;
     cout << "Enter Product ID to remove: ";
     cin >> productId;
-
     for (auto it = m_products->begin(); it != m_products->end(); ++it)
     {
         if (it->getProductId() == productId)
         {
-            m_products->erase(it);
+            it->updateStatus("Removed");
             cout << "Product with ID " << productId << " removed successfully.\n";
             return;
         }
     }
     cout << "Error: Product with ID " << productId << " not found.\n";
 }
+
 void WarehouseController::removeVehicle()
 {
     if (m_vehicles->empty())
     {
-        cout << "Not Vehicles to Remove\n";
+        cout << "No Vehicles to Remove\n";
         return;
     }
     listVehicles();
@@ -485,8 +540,15 @@ void WarehouseController::removeVehicle()
     }
     cout << "Error: Vehicle with ID " << vehicleId << " not found.\n";
 }
+
 void WarehouseController::removeStore()
 {
+    if (m_stores->empty())
+    {
+        cout << "No Store to Remove.\n";
+        return;
+    }
+    listStores();
     int storeId;
     cout << "Enter Store ID to remove: ";
     cin >> storeId;
@@ -494,13 +556,14 @@ void WarehouseController::removeStore()
     {
         if (it->getStoreId() == storeId)
         {
-            m_stores->erase(it);
+            it->setStoreStatus("Removed");
             cout << "Store with ID " << storeId << " removed successfully.\n";
             return;
         }
     }
     cout << "Error: Store with ID " << storeId << " not found.\n";
 }
+
 void WarehouseController::acceptDelivery()
 {
     int deliveryId, vehicleId;
@@ -549,18 +612,22 @@ void WarehouseController::acceptDelivery()
     }
     m_dispatchPendingProduct->clear();
 }
+
 shared_ptr<vector<Product>> WarehouseController::getProducts()
 {
     return m_products;
 }
+
 shared_ptr<vector<User>> WarehouseController::getUsers()
 {
     return m_users;
 }
+
 shared_ptr<vector<Vehicle>> WarehouseController::getVehicles()
 {
     return m_vehicles;
 }
+
 shared_ptr<vector<Store>> WarehouseController::getStores()
 {
     return m_stores;

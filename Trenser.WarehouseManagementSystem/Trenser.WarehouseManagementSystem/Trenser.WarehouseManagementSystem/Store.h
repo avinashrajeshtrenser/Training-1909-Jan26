@@ -14,5 +14,5 @@ public:
 	std::string getStoreName() const;
 	std::string getStoreLocation() const;
 	std::string getStoreStatus() const;
-	void setStoreStatus(std::string& status);
+	void setStoreStatus(std::string status);
 };

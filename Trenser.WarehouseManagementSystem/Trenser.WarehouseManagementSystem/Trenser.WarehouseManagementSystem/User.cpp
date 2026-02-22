@@ -4,6 +4,10 @@ int User::getUserId()
 {
     return m_userId;
 }
+std::string User::getUserStatus()
+{
+    return m_userStatus;
+}
 void User::updateUserStatus(std::string status)
 {
     m_userStatus = status;

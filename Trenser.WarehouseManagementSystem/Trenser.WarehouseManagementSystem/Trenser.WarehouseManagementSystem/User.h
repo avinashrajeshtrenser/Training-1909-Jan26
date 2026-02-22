@@ -15,6 +15,7 @@ public:
 	std::string getUserName();
 	std::string getPassword();
 	int getUserId();
+	std::string getUserStatus();
 	void updateUserStatus(std::string status);
 };
 

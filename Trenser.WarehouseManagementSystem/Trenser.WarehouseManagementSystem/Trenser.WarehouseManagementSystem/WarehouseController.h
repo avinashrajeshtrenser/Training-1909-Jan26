@@ -53,6 +53,7 @@ public:
     void removeVehicle();
     void removeStore();
     void dispatchProduct();
+    void listUsers() const;
     void listProducts() const;
     void listVehicles() const;
     void listDeliveries() const;

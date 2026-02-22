@@ -17,7 +17,7 @@ std::string Store::getStoreStatus() const
     return m_storeStatus;
 }
 
-void Store::setStoreStatus(std::string& status)
+void Store::setStoreStatus(std::string status)
 {
     m_storeStatus = status;
 }
