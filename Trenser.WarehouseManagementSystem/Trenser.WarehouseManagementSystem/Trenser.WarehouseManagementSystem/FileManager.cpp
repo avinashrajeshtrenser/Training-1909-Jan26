@@ -1,10 +1,6 @@
-#include <sstream>
-#include <string>
 using namespace std;
 #include "FileManager.h"
-#include "Delivery.h"
-#include "Store.h"
-#include "Vehicle.h" 
+
 
 void FileManager::saveDeliveries(const shared_ptr<vector<Delivery>>& deliveries, const string& fileName)
 {
@@ -13,11 +9,8 @@ void FileManager::saveDeliveries(const shared_ptr<vector<Delivery>>& deliveries,
     {
         int storeId = deliveryIt->getStore() ? deliveryIt->getStore()->getStoreId() : -1;
         int vehicleId = deliveryIt->getVehicle() ? deliveryIt->getVehicle()->getVehicleId() : -1;
-        file << deliveryIt->getDeliveryId() << "|"
-             << deliveryIt->getDeliveryStatus() << "|"
-             << deliveryIt->getDeliveryAddress() << "|"
-             << storeId << "|"
-             << vehicleId << "\n";
+        file << deliveryIt->getDeliveryId() << "|" << deliveryIt->getDeliveryStatus() << "|"
+             << deliveryIt->getDeliveryAddress() << "|" << storeId << "|" << vehicleId << "\n";
     }
 }
 

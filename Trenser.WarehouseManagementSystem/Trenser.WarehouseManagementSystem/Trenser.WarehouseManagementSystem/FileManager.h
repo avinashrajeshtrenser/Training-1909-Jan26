@@ -11,25 +11,38 @@ class FileManager
 {
 public:
     template<typename T>
-    void saveVector(const std::shared_ptr<std::vector<T>>& vec, const std::string& fileName)
-    {
-        std::ofstream out(fileName);
-        for (auto& obj : *vec)
-            out << obj.serialize() << "\n";
-    }
+    void saveVector(const std::shared_ptr<std::vector<T>>& vectors, const std::string& fileName);
     template<typename T>
-    void loadVector(std::shared_ptr<std::vector<T>>& vec, const std::string& fileName)
-    {
-        std::ifstream in(fileName);
-        if (!in) return;
-        vec->clear();
-        std::string line;
-        while (std::getline(in, line))
-            vec->push_back(T::deserialize(line));
-    }
+    void loadVector(std::shared_ptr<std::vector<T>>& vectors, const std::string& fileName);
     void saveDeliveries(const std::shared_ptr<std::vector<Delivery>>& deliveries, const std::string& fileName);
     void loadDeliveries(std::shared_ptr<std::vector<Delivery>>& deliveries,
         const std::shared_ptr<std::vector<Store>>& stores,
         const std::shared_ptr<std::vector<Vehicle>>& vehicles,
         const std::string& fileName);
 };
+
+template<typename T>
+inline void FileManager::saveVector(const std::shared_ptr<std::vector<T>>& vectors, const std::string& fileName)
+{
+    std::ofstream out(fileName);
+    for (auto& obj : *vectors)
+    {
+        out << obj.serialize() << "\n";
+    }
+}
+
+template<typename T>
+inline void FileManager::loadVector(std::shared_ptr<std::vector<T>>& vectors, const std::string& fileName)
+{
+    std::ifstream in(fileName);
+    if (!in)
+    {
+        return;
+    }
+    vectors->clear();
+    std::string line;
+    while (std::getline(in, line))
+    {
+        vectors->push_back(T::deserialize(line));
+    }
+}

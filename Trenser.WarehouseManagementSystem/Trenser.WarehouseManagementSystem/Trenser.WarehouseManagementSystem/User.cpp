@@ -53,7 +53,6 @@ User User::deserialize(const string& line)
     getline(ss, password, '|');
     getline(ss, role, '|');
     getline(ss, status, '|');
-
     User user(id, name, password, role);
     user.updateUserStatus(status);
     return user;

@@ -58,7 +58,7 @@ Product Product::deserialize(const string& line)
     getline(ss, token, '|'); quality = stoi(token);
     getline(ss, status, '|');
 
-    Product p(id, name, stock, quality);
-    p.updateStatus(status);
-    return p;
+    Product product(id, name, stock, quality);
+    product.updateStatus(status);
+    return product;
 }
