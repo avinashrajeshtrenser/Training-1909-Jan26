@@ -192,9 +192,9 @@ void WarehouseController::addProduct()
         std::cout << "Product '" << productName << "' added successfully.\n";
         saveSystem();
     }
-    catch (const std::exception& ex)
+    catch (const std::exception& e)
     {
-        std::cout << "Error: " << ex.what() << "\n";
+        std::cout << "Error: " << e.what() << "\n";
     }
 }
 
@@ -659,6 +659,8 @@ void WarehouseController::loadSystem()
     fileManager.loadVector(m_stores, "Store.txt");
     fileManager.loadVector(m_users, "User.txt");
     fileManager.loadDeliveries(m_deliveries, m_stores, m_vehicles, m_products, "Delivery.txt");
+    fileManager.loadDispatchQueue(m_dispatchPendingProduct, m_products, m_stores, "DispatchPendingItems.txt");
+    fileManager.loadRejectedItems(m_damagedProducts, m_products, m_stores, "DamagedProduct.txt");
 }
 
 void WarehouseController::saveSystem()
@@ -668,6 +670,8 @@ void WarehouseController::saveSystem()
     fileManager.saveVector(m_stores, "Store.txt");
     fileManager.saveVector(m_users, "User.txt");
     fileManager.saveDeliveries(m_deliveries, "Delivery.txt");
+    fileManager.saveDispatchQueue(m_dispatchPendingProduct, "DispatchPendingItems.txt");
+    fileManager.saveRejectedItems(m_damagedProducts, "DamagedProduct.txt");
 }
 
 std::vector<std::shared_ptr<Product>>& WarehouseController::getProducts()

@@ -7,6 +7,7 @@
 #include "Delivery.h"
 #include "Store.h"
 #include "Vehicle.h"
+#include "Product.h"
 
 class FileManager
 {
@@ -16,7 +17,12 @@ public:
     template<typename T>
     void loadVector(std::vector<std::shared_ptr<T>>& vectors, const std::string& fileName);
     void saveDeliveries(const std::vector<Delivery>& deliveries, const std::string& fileName);
-    void loadDeliveries(std::vector<Delivery>& deliveries, const std::vector<std::shared_ptr<Store>>& stores, const std::vector<std::shared_ptr<Vehicle>>& vehicles, const std::string& fileName);
+    void loadDeliveries(std::vector<Delivery>& deliveries, const std::vector<std::shared_ptr<Store>>& stores,
+        const std::vector<std::shared_ptr<Vehicle>>& vehicles, const std::vector<std::shared_ptr<Product>>& products, const std::string& fileName);
+    void saveDispatchQueue(const std::vector<DeliveryItem>& dispatchQueue, const std::string& fileName);
+    void loadDispatchQueue(std::vector<DeliveryItem>& dispatchQueue, const std::vector<std::shared_ptr<Product>>& products, const std::vector<std::shared_ptr<Store>>& stores, const std::string& fileName);
+    void saveRejectedItems(const std::vector<DeliveryItem>& rejectedItems, const std::string& fileName);
+    void loadRejectedItems(std::vector<DeliveryItem>& rejectedItems, const std::vector<std::shared_ptr<Product>>& products, const std::vector<std::shared_ptr<Store>>& stores,const std::string& fileName);
 };
 
 template<typename T>
