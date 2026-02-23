@@ -1,2 +1,0 @@
-101|Thomas|100|0|Active
-102|Sufiyan|400|0|Active

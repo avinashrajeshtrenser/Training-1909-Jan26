@@ -1,4 +1,0 @@
-1001|Tomato|5|9|Unchecked
-1002|Fan|0|10|Unchecked
-1003|Fan|10|10|Unchecked
-1004|Mango|0|5|Out of Stock
