@@ -15,31 +15,21 @@
 #include "StaffMenu.h"
 #include "FileManager.h"
 
-class WarehouseController
-{
+class WarehouseController {
 private:
-    std::shared_ptr<std::vector<Product>> m_products;
-    std::shared_ptr<std::vector<Delivery>> m_deliveries;
-    std::shared_ptr<std::vector<Vehicle>> m_vehicles;
-    std::shared_ptr<std::vector<Store>> m_stores;
-    std::shared_ptr<std::vector<DeliveryItem>> m_dispatchPendingProduct;
-    std::shared_ptr<std::vector<DeliveryItem>> m_damagedProducts;
+    std::vector<std::shared_ptr> m_products;
+    std::vector<std::shared_ptr> m_vehicles;
+    std::vector<std::shared_ptr> m_stores;
+    std::vector<std::shared_ptr> m_users;
+    std::vector m_dispatchPendingProduct;
+    std::vector m_damagedProducts;
+    std::vector m_deliveries;
     QualityCheck m_qualityCheck;
-    std::shared_ptr<std::vector<User>> m_users;
     User m_autherizedUser;
-    Menu* m_menu;
+    std::unique_ptr<Menu> m_menu;
     FileManager fileManager;
 public:
-    WarehouseController()
-        : m_products(std::make_shared<std::vector<Product>>()),
-        m_deliveries(std::make_shared<std::vector<Delivery>>()),
-        m_vehicles(std::make_shared<std::vector<Vehicle>>()),
-        m_stores(std::make_shared<std::vector<Store>>()),
-        m_dispatchPendingProduct(std::make_shared<std::vector<DeliveryItem>>()),
-        m_damagedProducts(std::make_shared<std::vector<DeliveryItem>>()),
-        m_users(std::make_shared<std::vector<User>>()),
-        m_menu(nullptr) {
-    }
+    WarehouseController();
     void controllerMenu();
     bool authorizeUser(const std::string& username, const std::string& password);
     void loginUser();
@@ -53,18 +43,18 @@ public:
     void removeVehicle();
     void removeStore();
     void dispatchProduct();
+    void acceptDelivery();
+    void updateDeliveryStatus();
     void listUsers() const;
     void listProducts() const;
     void listVehicles() const;
-    void listDeliveries() const;
-    void listDispatchPendingItems();
     void listStores() const;
-    void acceptDelivery();
-    void updateDeliveryStatus();
+    void listDeliveries() const;
+    void listDispatchPendingItems() const;
     void loadSystem();
     void saveSystem();
-    std::shared_ptr<std::vector<Product>> getProducts();
-    std::shared_ptr<std::vector<User>> getUsers();
-    std::shared_ptr<std::vector<Vehicle>> getVehicles();
-    std::shared_ptr<std::vector<Store>> getStores();
+    std::vector<std::shared_ptr<Product>>& getProducts();
+    std::vector<std::shared_ptr<User>>& getUsers();
+    std::vector<std::shared_ptr<Vehicle>>& getVehicles();
+    std::vector<std::shared_ptr<Store>>& getStores();
 };
