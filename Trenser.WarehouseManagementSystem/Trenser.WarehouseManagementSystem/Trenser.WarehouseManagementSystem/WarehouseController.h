@@ -17,13 +17,13 @@
 
 class WarehouseController {
 private:
-    std::vector<std::shared_ptr> m_products;
-    std::vector<std::shared_ptr> m_vehicles;
-    std::vector<std::shared_ptr> m_stores;
-    std::vector<std::shared_ptr> m_users;
-    std::vector m_dispatchPendingProduct;
-    std::vector m_damagedProducts;
-    std::vector m_deliveries;
+    std::vector<std::shared_ptr<Product>> m_products;
+    std::vector<std::shared_ptr<Vehicle>> m_vehicles;
+    std::vector<std::shared_ptr<Store>> m_stores;
+    std::vector<std::shared_ptr<User>> m_users;
+    std::vector<DeliveryItem> m_dispatchPendingProduct;
+    std::vector<DeliveryItem> m_damagedProducts;
+    std::vector<Delivery> m_deliveries;
     QualityCheck m_qualityCheck;
     User m_autherizedUser;
     std::unique_ptr<Menu> m_menu;
