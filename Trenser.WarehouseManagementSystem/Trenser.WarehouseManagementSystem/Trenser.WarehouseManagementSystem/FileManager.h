@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <fstream>
+#include <sstream>
 #include "Delivery.h"
 #include "Store.h"
 #include "Vehicle.h"
@@ -11,38 +12,35 @@ class FileManager
 {
 public:
     template<typename T>
-    void saveVector(const std::shared_ptr<std::vector<T>>& vectors, const std::string& fileName);
+    void saveVector(const std::vector<std::shared_ptr<T>>& vectors, const std::string& fileName);
     template<typename T>
-    void loadVector(std::shared_ptr<std::vector<T>>& vectors, const std::string& fileName);
-    void saveDeliveries(const std::shared_ptr<std::vector<Delivery>>& deliveries, const std::string& fileName);
-    void loadDeliveries(std::shared_ptr<std::vector<Delivery>>& deliveries,
-        const std::shared_ptr<std::vector<Store>>& stores,
-        const std::shared_ptr<std::vector<Vehicle>>& vehicles,
-        const std::string& fileName);
+    void loadVector(std::vector<std::shared_ptr<T>>& vectors, const std::string& fileName);
+    void saveDeliveries(const std::vector<Delivery>& deliveries, const std::string& fileName);
+    void loadDeliveries(std::vector<Delivery>& deliveries, const std::vector<std::shared_ptr<Store>>& stores, const std::vector<std::shared_ptr<Vehicle>>& vehicles, const std::string& fileName);
 };
 
 template<typename T>
-inline void FileManager::saveVector(const std::shared_ptr<std::vector<T>>& vectors, const std::string& fileName)
+inline void FileManager::saveVector(const std::vector<std::shared_ptr<T>>& vectors, const std::string& fileName)
 {
     std::ofstream out(fileName);
-    for (auto& obj : *vectors)
+    for (typename std::vector<std::shared_ptr<T>>::const_iterator it = vectors.begin(); it != vectors.end(); ++it)
     {
-        out << obj.serialize() << "\n";
+        out << (*it)->serialize() << "\n";
     }
 }
 
 template<typename T>
-inline void FileManager::loadVector(std::shared_ptr<std::vector<T>>& vectors, const std::string& fileName)
+inline void FileManager::loadVector(std::vector<std::shared_ptr<T>>& vectors, const std::string& fileName)
 {
     std::ifstream in(fileName);
     if (!in)
     {
         return;
     }
-    vectors->clear();
+    vectors.clear();
     std::string line;
     while (std::getline(in, line))
     {
-        vectors->push_back(T::deserialize(line));
+        vectors.push_back(std::make_shared<T>(T::deserialize(line)));
     }
 }

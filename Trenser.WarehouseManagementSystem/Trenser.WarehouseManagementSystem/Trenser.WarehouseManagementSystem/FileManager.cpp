@@ -1,63 +1,70 @@
-using namespace std;
 #include "FileManager.h"
 
-
-void FileManager::saveDeliveries(const shared_ptr<vector<Delivery>>& deliveries, const string& fileName)
+void FileManager::saveDeliveries(const std::vector<Delivery>& deliveries, const std::string& fileName)
 {
-    ofstream file(fileName);
-    for (auto deliveryIt = deliveries->begin(); deliveryIt != deliveries->end(); ++deliveryIt)
+    std::ofstream file(fileName);
+    for (std::vector<Delivery>::const_iterator it = deliveries.begin(); it != deliveries.end(); ++it)
     {
-        int storeId = deliveryIt->getStore() ? deliveryIt->getStore()->getStoreId() : -1;
-        int vehicleId = deliveryIt->getVehicle() ? deliveryIt->getVehicle()->getVehicleId() : -1;
-        file << deliveryIt->getDeliveryId() << "|" << deliveryIt->getDeliveryStatus() << "|"
-             << deliveryIt->getDeliveryAddress() << "|" << storeId << "|" << vehicleId << "\n";
+        int storeId = -1;
+        int vehicleId = -1;
+        if (it->getStore())
+        {
+            storeId = it->getStore()->getStoreId();
+        }
+        if (it->getVehicle())
+        {
+            vehicleId = it->getVehicle()->getVehicleId();
+        }
+        file << it->getDeliveryId() << "|" << it->getDeliveryStatus() << "|" << it->getDeliveryAddress() << "|" << storeId << "|" << vehicleId << "\n";
     }
 }
 
-void FileManager::loadDeliveries(shared_ptr<vector<Delivery>>& deliveries, const shared_ptr<vector<Store>>& stores, const shared_ptr<vector<Vehicle>>& vehicles, const string& fileName)
+void FileManager::loadDeliveries(std::vector<Delivery>& deliveries, const std::vector<std::shared_ptr<Store>>& stores, const std::vector<std::shared_ptr<Vehicle>>& vehicles, const std::string& fileName)
 {
-    ifstream file(fileName);
-    if (!file) return;
-    deliveries->clear();
-    string line;
-    string token;
-    int deliveryId;
-    int storeId;
-    int vehicleId;
-    string deliveryStatus;
-    string deliveryAddress;
-    while (getline(file, line))
+    std::ifstream file(fileName);
+    if (!file)
     {
-        stringstream lineStream(line);
-        getline(lineStream, token, '|');
-        deliveryId = stoi(token);
-        getline(lineStream, deliveryStatus, '|');
-        getline(lineStream, deliveryAddress, '|');
-        getline(lineStream, token, '|');
-        storeId = stoi(token);
-        getline(lineStream, token, '|');
-        vehicleId = stoi(token);
-        shared_ptr<Store> storePtr = nullptr;
-        shared_ptr<Vehicle> vehiclePtr = nullptr;
-        for (auto storeIt = stores->begin(); storeIt != stores->end(); ++storeIt)
+        return;
+    }
+    deliveries.clear();
+    std::string line;
+    std::string token;
+    while (std::getline(file, line))
+    {
+        std::stringstream ss(line);
+        int deliveryId;
+        std::string status;
+        std::string address;
+        int storeId;
+        int vehicleId;
+        std::getline(ss, token, '|');
+        deliveryId = std::stoi(token);
+        std::getline(ss, status, '|');
+        std::getline(ss, address, '|');
+        std::getline(ss, token, '|');
+        storeId = std::stoi(token);
+        std::getline(ss, token, '|');
+        vehicleId = std::stoi(token);
+        std::shared_ptr<Store> store = nullptr;
+        std::shared_ptr<Vehicle> vehicle = nullptr;
+        for (std::vector<std::shared_ptr<Store>>::const_iterator storeIt = stores.begin(); storeIt != stores.end(); ++storeIt)
         {
-            if (storeIt->getStoreId() == storeId)
+            if ((*storeIt)->getStoreId() == storeId)
             {
-                storePtr = make_shared<Store>(*storeIt);
+                store = *storeIt;
                 break;
             }
         }
-        for (auto vehicleIt = vehicles->begin(); vehicleIt != vehicles->end(); ++vehicleIt)
+        for (std::vector<std::shared_ptr<Vehicle>>::const_iterator vehicleIt = vehicles.begin(); vehicleIt != vehicles.end(); ++vehicleIt)
         {
-            if (vehicleIt->getVehicleId() == vehicleId)
+            if ((*vehicleIt)->getVehicleId() == vehicleId)
             {
-                vehiclePtr = make_shared<Vehicle>(*vehicleIt);
+                vehicle = *vehicleIt;
                 break;
             }
         }
-        Delivery delivery(deliveryId, deliveryAddress, storePtr);
-        delivery.updateDeliveryStatus(deliveryStatus);
-        delivery.assignVehicle(vehiclePtr);
-        deliveries->push_back(delivery);
+        Delivery delivery(deliveryId, address, store, vehicle);
+        delivery.updateDeliveryStatus(status);
+        deliveries.push_back(delivery);
     }
 }
