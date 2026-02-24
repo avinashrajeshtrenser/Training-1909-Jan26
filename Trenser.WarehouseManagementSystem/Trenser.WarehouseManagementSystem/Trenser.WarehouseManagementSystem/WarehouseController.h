@@ -26,7 +26,7 @@ private:
     std::vector<DeliveryItem> m_damagedProducts;
     std::vector<Delivery> m_deliveries;
     QualityCheck m_qualityCheck;
-    User m_autherizedUser;
+    std::shared_ptr<User> m_autherizedUser;
     std::unique_ptr<Menu> m_menu;
     FileManager fileManager;
 public:

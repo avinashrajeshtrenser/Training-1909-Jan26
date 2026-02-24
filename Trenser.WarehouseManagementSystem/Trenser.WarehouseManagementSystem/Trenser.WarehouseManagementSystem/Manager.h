@@ -15,8 +15,8 @@ private:
     std::vector<std::shared_ptr<Store>> m_stores;
 public:
     Manager() : User(), m_deliveries(), m_vehicles(), m_stores() {}
-    Manager(int userId, const std::string& userName, const std::string& password, const std::string& role = "Manager")
-        : User(userId, userName, password, role), m_deliveries(), m_vehicles(), m_stores() {}
+    Manager(int userId, const std::string& userName, const std::string& password)
+        : User(userId, userName, password), m_deliveries(), m_vehicles(), m_stores() {}
     std::vector<std::shared_ptr<Vehicle>>& getAllManagedVehicles();
     std::vector<std::shared_ptr<Store>>& getAllManagedStores();
     std::vector<std::shared_ptr<Delivery>>& getAllDeliveries();
@@ -25,4 +25,5 @@ public:
     void addDelivery(const std::shared_ptr<Delivery>& delivery);
     void requestDispatch(WarehouseController& controller);
     void viewDeliveries(const WarehouseController& controller) const;
+    std::string getRole() const override;
 };

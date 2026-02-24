@@ -9,9 +9,9 @@ private:
 	std::vector<Delivery> m_delivery;
 public:
 	Staff() : m_delivery() {}
-	Staff(int userId, std::string userName, std::string password, std::string role) : User(userId, userName, password, role), m_delivery() {}
+	Staff(int userId, std::string userName, std::string password) : User(userId, userName, password), m_delivery() {}
 	void performQualityCheck();
-	void UpdateDelivery();
 	void acceptDelivery();
+    std::string getRole() const override;
 };
 

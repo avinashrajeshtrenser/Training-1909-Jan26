@@ -1,5 +1,7 @@
 using namespace std;
 #include "WarehouseController.h"
+#include "Manager.h"
+#include "Staff.h"
 
 WarehouseController::WarehouseController()
 {
@@ -46,7 +48,7 @@ bool WarehouseController::authorizeUser(const string& username, const string& pa
         {
             if ((*iterator)->getUserName() == username && (*iterator)->getPassword() == password)
             {
-                m_autherizedUser = *(*iterator);
+                m_autherizedUser = (*iterator);
                 return true;
             }
         }
@@ -55,6 +57,7 @@ bool WarehouseController::authorizeUser(const string& username, const string& pa
     catch (const exception& e)
     {
         cout << "Error: " << e.what() << "\n" << "\n";
+        return false;
     }
 }
 
@@ -67,16 +70,16 @@ void WarehouseController::loginUser() {
         readString(password);
         if (authorizeUser(username, password))
         {
-            cout << "Login Successfull ! Welcome " << m_autherizedUser.getUserName() << endl;
-            if (m_autherizedUser.getRole() == "Admin")
+            cout << "Login Successfull ! Welcome " << m_autherizedUser->getUserName() << endl;
+            if (m_autherizedUser->getRole() == "Admin")
             {
                 m_menu = make_unique<AdminMenu>();
             }
-            else if (m_autherizedUser.getRole() == "Manager")
+            else if (m_autherizedUser->getRole() == "Manager")
             {
                 m_menu = make_unique<ManagerMenu>();
             }
-            else if (m_autherizedUser.getRole() == "Staff")
+            else if (m_autherizedUser->getRole() == "Staff")
             {
                 m_menu = make_unique<StaffMenu>();
             }
@@ -87,7 +90,7 @@ void WarehouseController::loginUser() {
             }
             else
             {
-                cout << "\nError: No menu available for role '" << m_autherizedUser.getRole() << "'\n";
+                cout << "\nError: No menu available for role '" << m_autherizedUser->getRole() << "'\n";
             }
         }
         else
@@ -112,11 +115,15 @@ void WarehouseController::addUser() {
         readString(password);
         cout << "Select Role:\n1. Manager\n2. Staff\n\nEnter choice: ";
         readValue<int>(roleChoice);
+        std::shared_ptr<User> newUser;
+        int userId = static_cast<int>(m_users.size()) + 101;
         switch (roleChoice)
         {
         case 1: role = "Manager";
+            newUser = make_shared<Manager>(userId, username, password);
             break;
         case 2: role = "Staff";
+            newUser = make_shared<Staff>(userId, username, password);
             break;
         default: cout << "Invalid Input.\n";
             return;
@@ -129,8 +136,6 @@ void WarehouseController::addUser() {
                 return;
             }
         }
-        int userId = static_cast<int>(m_users.size()) + 101;
-        shared_ptr<User> newUser = make_shared<User>(userId, username, password, role);
         m_users.push_back(newUser);
         cout << "User '" << username << "' registered successfully as " << role << ".\n";
     }

@@ -5,6 +5,7 @@
 #include <fstream>
 #include <sstream>
 #include "Delivery.h"
+#include "User.h"
 #include "Store.h"
 #include "Vehicle.h"
 #include "Product.h"
@@ -39,14 +40,26 @@ template<typename T>
 inline void FileManager::loadVector(std::vector<std::shared_ptr<T>>& vectors, const std::string& fileName)
 {
     std::ifstream in(fileName);
-    if (!in)
-    {
-        return;
-    }
+    if (!in) return;
+
     vectors.clear();
     std::string line;
     while (std::getline(in, line))
     {
         vectors.push_back(std::make_shared<T>(T::deserialize(line)));
+    }
+}
+
+template<>
+inline void FileManager::loadVector<User>(std::vector<std::shared_ptr<User>>& vectors, const std::string& fileName)
+{
+    std::ifstream in(fileName);
+    if (!in) return;
+
+    vectors.clear();
+    std::string line;
+    while (std::getline(in, line))
+    {
+        vectors.push_back(User::deserialize(line));
     }
 }

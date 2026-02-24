@@ -5,6 +5,7 @@ class Admin : public User
 {
 public:
 	Admin() {}
-	Admin(int userId, std::string userName, std::string password, std::string role) : User(userId, userName, password, role) {}
+	Admin(int userId, std::string userName, std::string password) : User(userId, userName, password) {}
+    std::string getRole() const override;
 };
 

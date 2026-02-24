@@ -135,4 +135,27 @@
       <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="DamagedProduct.txt">
+      <Filter>Files</Filter>
+    </Text>
+    <Text Include="Delivery.txt">
+      <Filter>Files</Filter>
+    </Text>
+    <Text Include="DispatchPendingItems.txt">
+      <Filter>Files</Filter>
+    </Text>
+    <Text Include="Product.txt">
+      <Filter>Files</Filter>
+    </Text>
+    <Text Include="Store.txt">
+      <Filter>Files</Filter>
+    </Text>
+    <Text Include="User.txt">
+      <Filter>Files</Filter>
+    </Text>
+    <Text Include="Vehicle.txt">
+      <Filter>Files</Filter>
+    </Text>
+  </ItemGroup>
 </Project>

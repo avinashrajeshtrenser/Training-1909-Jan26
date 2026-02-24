@@ -40,3 +40,8 @@ void Manager::viewDeliveries(const WarehouseController& controller) const
 {
     controller.listDeliveries();
 }
+
+std::string Manager::getRole() const
+{
+    return "Manager";
+}

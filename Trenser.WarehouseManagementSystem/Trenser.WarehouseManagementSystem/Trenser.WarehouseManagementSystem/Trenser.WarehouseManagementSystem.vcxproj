@@ -161,6 +161,15 @@
     <ClInclude Include="Vehicle.h" />
     <ClInclude Include="WarehouseController.h" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="DamagedProduct.txt" />
+    <Text Include="Delivery.txt" />
+    <Text Include="DispatchPendingItems.txt" />
+    <Text Include="Product.txt" />
+    <Text Include="Store.txt" />
+    <Text Include="User.txt" />
+    <Text Include="Vehicle.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
