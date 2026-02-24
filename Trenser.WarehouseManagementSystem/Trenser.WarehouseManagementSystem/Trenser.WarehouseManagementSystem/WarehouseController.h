@@ -30,7 +30,7 @@ private:
     std::unique_ptr<Menu> m_menu;
     FileManager fileManager;
 public:
-    WarehouseController();
+    WarehouseController() {}
     void controllerMenu();
     bool authorizeUser(const std::string& username, const std::string& password);
     void loginUser();

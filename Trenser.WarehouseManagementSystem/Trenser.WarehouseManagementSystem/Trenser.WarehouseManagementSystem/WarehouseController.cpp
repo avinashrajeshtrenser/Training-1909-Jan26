@@ -3,11 +3,6 @@ using namespace std;
 #include "Manager.h"
 #include "Staff.h"
 
-WarehouseController::WarehouseController()
-{
-    loadSystem();
-}
-
 void WarehouseController::controllerMenu() {
     int choice;
     do
@@ -364,7 +359,7 @@ void WarehouseController::listVehicles() const
         cout << "--- Vehicle List ---\n";
         for (auto iterator = m_vehicles.begin(); iterator != m_vehicles.end(); ++iterator)
         {
-            if ((*iterator)->getStatus() != "Active")
+            if (!(*iterator)->isActive())
             {
                 continue;
             }
@@ -500,7 +495,7 @@ void WarehouseController::acceptDelivery()
             readValue<int>(vehicleId);
             for (auto vehicleIterator = m_vehicles.begin(); vehicleIterator != m_vehicles.end(); ++vehicleIterator)
             {
-                if ((*vehicleIterator)->getVehicleId() == vehicleId && (*vehicleIterator)->getIsAvailable() && (*vehicleIterator)->getStatus() == "Active")
+                if ((*vehicleIterator)->getVehicleId() == vehicleId && (*vehicleIterator)->getIsAvailable() && (*vehicleIterator)->isActive())
                 {
                     (*vehicleIterator)->setIsAvailable(false);
                     selectedVehicle = *vehicleIterator;
@@ -705,7 +700,7 @@ void WarehouseController::removeVehicle()
         {
             if ((*iterator)->getVehicleId() == vehicleId)
             {
-                (*iterator)->setStatus("Removed");
+                (*iterator)->setIsActive(false);
                 (*iterator)->setIsAvailable(false);
                 cout << "Vehicle with ID " << vehicleId << " removed successfully.\n";
                 return;
