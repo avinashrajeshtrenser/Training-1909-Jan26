@@ -317,7 +317,7 @@ void WarehouseController::dispatchProduct() {
         readValue<int>(storeId);
         for (auto storeIterator = m_stores.begin(); storeIterator != m_stores.end(); ++storeIterator)
         {
-            if ((*storeIterator)->getStoreId() == storeId && (*storeIterator)->getStoreStatus() != "Removed")
+            if ((*storeIterator)->getStoreId() == storeId && (*storeIterator)->isActive())
             {
                 selectedStore = *storeIterator;
                 break;
@@ -450,7 +450,7 @@ void WarehouseController::listStores() const
         cout << "--- Store List ---\n";
         for (auto iterator = m_stores.begin(); iterator != m_stores.end(); ++iterator)
         {
-            if ((*iterator)->getStoreStatus() == "Removed")
+            if (!(*iterator)->isActive())
             {
                 continue;
             }
@@ -763,7 +763,7 @@ void WarehouseController::removeStore()
         {
             if ((*iterator)->getStoreId() == storeId)
             {
-                (*iterator)->setStoreStatus("Removed");
+                (*iterator)->setIsActive("Removed");
                 cout << "Store '" << (*iterator)->getStoreName() << "' removed successfully.\n";
                 return;
             }

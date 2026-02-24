@@ -1,2 +1,2 @@
-101|Oxygen|Kottayam|Active
-102|myG|Ernakulam|Active
+101|Oxygen|Kottayam|1
+102|myG|Ernakulam|1

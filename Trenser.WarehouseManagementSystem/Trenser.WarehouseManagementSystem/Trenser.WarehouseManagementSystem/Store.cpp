@@ -17,14 +17,14 @@ string Store::getStoreLocation() const
     return m_location;
 }
 
-string Store::getStoreStatus() const
+bool Store::isActive() const
 {
-    return m_storeStatus;
+    return m_isActive;
 }
 
-void Store::setStoreStatus(string status)
+void Store::setIsActive(bool status)
 {
-    m_storeStatus = status;
+    m_isActive = status;
 }
 
 string Store::serialize() const
@@ -32,20 +32,27 @@ string Store::serialize() const
     return to_string(m_storeId) + "|" +
         m_storeName + "|" +
         m_location + "|" +
-        m_storeStatus;
+        to_string(m_isActive);
 }
 
 Store Store::deserialize(const string& line)
 {
-    stringstream ss(line);
-    string token;
-    int id;
-    string name, location, status;
-    getline(ss, token, '|'); id = stoi(token);
-    getline(ss, name, '|');
-    getline(ss, location, '|');
-    getline(ss, status, '|');
-    Store store(id, name, location);
-    store.setStoreStatus(status);
-    return store;
+    try
+    {
+        stringstream ss(line);
+        string token;
+        int id;
+        string name, location;
+        getline(ss, token, '|'); id = stoi(token);
+        getline(ss, name, '|');
+        getline(ss, location, '|');
+        getline(ss, token, '|');
+        Store store(id, name, location);
+        store.setIsActive(stoi(token));
+        return store;
+    }
+    catch (...)
+    {
+        throw runtime_error("Error parsing file");
+    }
 }
