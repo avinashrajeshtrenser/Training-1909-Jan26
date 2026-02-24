@@ -31,8 +31,25 @@ void WarehouseController::controllerMenu() {
             cout << "Error: " << e.what() << "\n" << "\n";
         }
     } while (choice != 2);
-    
-    
+}
+
+string getProductStatusString(ProductStatus status)
+{
+    switch (status)
+    {
+    case ProductStatus::ACTIVE:
+        return "Active";
+    case ProductStatus::APPROVED:
+        return "Approved";
+    case ProductStatus::DAMAGED:
+        return "Damaged";
+    case ProductStatus::OUT_OF_STOCK:
+        return "Out of Stock";
+    case ProductStatus::REMOVED:
+        return "Removed";
+    default:
+        return "Invalid Product Status";
+    }
 }
 
 bool WarehouseController::authorizeUser(const string& username, const string& password)
@@ -264,7 +281,7 @@ void WarehouseController::dispatchProduct() {
         readValue<int>(productId);
         for (auto productIterator = m_products.begin(); productIterator != m_products.end(); ++productIterator)
         {
-            if ((*productIterator)->getProductId() == productId && (*productIterator)->getStatus() != "Removed")
+            if ((*productIterator)->getProductId() == productId && (*productIterator)->getStatus() != ProductStatus::REMOVED)
             {
                 selectedProduct = *productIterator;
                 break;
@@ -306,7 +323,7 @@ void WarehouseController::dispatchProduct() {
         selectedProduct->updateStock(-quantity);
         if (selectedProduct->getStockQuantity() == 0)
         {
-            selectedProduct->updateStatus("Out of Stock");
+            selectedProduct->updateStatus(ProductStatus::OUT_OF_STOCK);
         }
         DeliveryItem item(quantity, selectedProduct, selectedStore);
         m_dispatchPendingProduct.push_back(item);
@@ -388,7 +405,7 @@ void WarehouseController::listProducts() const
         cout << "\n--- Product List ---\n";
         for (auto iterator = m_products.begin(); iterator != m_products.end(); ++iterator)
         {
-            if ((*iterator)->getStatus() == "Removed")
+            if ((*iterator)->getStatus() == ProductStatus::REMOVED)
             {
                 continue;
             }
@@ -396,7 +413,7 @@ void WarehouseController::listProducts() const
                 << " | Name: " << (*iterator)->getProductName()
                 << " | Stock: " << (*iterator)->getStockQuantity()
                 << " | Quality Score: " << (*iterator)->getQualityScore()
-                << " | Status: " << (*iterator)->getStatus()
+                << " | Status: " << getProductStatusString((*iterator)->getStatus())
                 << "\n";
         }
     }
@@ -452,7 +469,7 @@ void WarehouseController::listDispatchPendingItems() const
                 cout << "Product ID: " << product->getProductId()
                     << " | Name: " << product->getProductName()
                     << " | Quantity: " << iterator->getQuantity()
-                    << " | Status: " << product->getStatus()
+                    << " | Status: " << getProductStatusString(product->getStatus())
                     << "\n";
             }
         }
@@ -670,7 +687,7 @@ void WarehouseController::removeProduct()
         {
             if ((*iterator)->getProductId() == productId)
             {
-                (*iterator)->updateStatus("Removed");
+                (*iterator)->updateStatus(ProductStatus::REMOVED);
                 cout << "Product '" << (*iterator)->getProductName() << "' removed successfully.\n";
                 return;
             }
@@ -758,12 +775,12 @@ void WarehouseController::performQualityCheck()
             shared_ptr<Product> product = iterator->getProduct();
             if (product->getQualityScore() >= m_qualityCheck.getThreshold())
             {
-                product->updateStatus("Approved");
+                product->updateStatus(ProductStatus::APPROVED);
                 ++iterator;
             }
             else
             {
-                product->updateStatus("Damaged");
+                product->updateStatus(ProductStatus::DAMAGED);
                 m_damagedProducts.push_back(*iterator);
                 iterator = m_dispatchPendingProduct.erase(iterator);
             }

@@ -1,3 +1,3 @@
-101|SmartPhone|0|10|Approved
-102|Keyboard|25|4|Damaged
-103|Laptop|1|9|Approved
+101|SmartPhone|0|10|2
+102|Keyboard|25|4|3
+103|Laptop|1|9|2

@@ -1,2 +1,2 @@
-101|David|500|0|Active
-102|Smith|400|1|Active
+101|David|500|0|1
+102|Smith|400|1|1

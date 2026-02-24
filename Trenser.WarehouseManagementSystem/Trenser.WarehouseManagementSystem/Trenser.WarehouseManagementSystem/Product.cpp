@@ -21,7 +21,7 @@ string Product::getProductName() const
     return m_productName;
 }
 
-string Product::getStatus() const
+ProductStatus Product::getStatus() const
 {
     return m_status;
 }
@@ -31,7 +31,7 @@ void Product::updateStock(int quantity)
     m_stockQuantity += quantity;
 }
 
-void Product::updateStatus(string status)
+void Product::updateStatus(ProductStatus status)
 {
     m_status = status;
 }
@@ -42,23 +42,33 @@ string Product::serialize() const
         m_productName + "|" +
         to_string(m_stockQuantity) + "|" +
         to_string(m_qualityScore) + "|" +
-        m_status;
+        to_string(static_cast<int>(m_status));
 }
 
 Product Product::deserialize(const string& line)
 {
-    stringstream ss(line);
-    string token;
-    int id, stock, quality;
-    string name, status;
-
-    getline(ss, token, '|'); id = stoi(token);
-    getline(ss, name, '|');
-    getline(ss, token, '|'); stock = stoi(token);
-    getline(ss, token, '|'); quality = stoi(token);
-    getline(ss, status, '|');
-
-    Product product(id, name, stock, quality);
-    product.updateStatus(status);
-    return product;
+    try
+    {
+        stringstream ss(line);
+        string token;
+        int id, stock, quality, statusInt;
+        string name;
+        getline(ss, token, '|'); id = stoi(token);
+        getline(ss, name, '|');
+        getline(ss, token, '|'); stock = stoi(token);
+        getline(ss, token, '|'); quality = stoi(token);
+        getline(ss, token, '|');
+        statusInt = stoi(token);
+        if (statusInt < static_cast<int>(ProductStatus::ACTIVE) && statusInt > static_cast<int>(ProductStatus::REMOVED))
+        {
+            throw runtime_error("Invalid Product Status");
+        }
+        Product product(id, name, stock, quality);
+        product.updateStatus(static_cast<ProductStatus>(statusInt));
+        return product;
+    }
+    catch (...)
+    {
+        throw runtime_error("Error parsing file");
+    }
 }
