@@ -4,24 +4,24 @@ using namespace std;
 void FileManager::saveDeliveries(const vector<Delivery>& deliveries, const string& fileName)
 {
     ofstream file(fileName);
-    for (vector<Delivery>::const_iterator it = deliveries.begin(); it != deliveries.end(); ++it)
+    for (vector<Delivery>::const_iterator deliveryIterator = deliveries.begin(); deliveryIterator != deliveries.end(); ++deliveryIterator)
     {
         int storeId = -1;
         int vehicleId = -1;
-        if (it->getStore())
+        if (deliveryIterator->getStore())
         {
-            storeId = it->getStore()->getStoreId();
+            storeId = deliveryIterator->getStore()->getStoreId();
         }
-        if (it->getVehicle())
+        if (deliveryIterator->getVehicle())
         {
-            vehicleId = it->getVehicle()->getVehicleId();
+            vehicleId = deliveryIterator->getVehicle()->getVehicleId();
         }
-        file << it->getDeliveryId() << "|"
-            << it->getDeliveryStatus() << "|"
-            << it->getDeliveryAddress() << "|"
+        file << deliveryIterator->getDeliveryId() << "|"
+            << to_string(static_cast<int>(deliveryIterator->getDeliveryStatus())) << "|"
+            << deliveryIterator->getDeliveryAddress() << "|"
             << storeId << "|"
             << vehicleId << "|";
-        const vector<DeliveryItem>& items = it->getItems();
+        const vector<DeliveryItem>& items = deliveryIterator->getItems();
         for (vector<DeliveryItem>::const_iterator itemIt = items.begin(); itemIt != items.end(); ++itemIt)
         {
             if (itemIt->getProduct())
@@ -51,14 +51,19 @@ void FileManager::loadDeliveries(vector<Delivery>& deliveries, const vector<shar
         stringstream ss(line);
         string token;
         int deliveryId;
-        string status;
+        DeliveryStatus status;
         string address;
         int storeId;
         int vehicleId;
         string itemsPart;
         getline(ss, token, '|');
         deliveryId = stoi(token);
-        getline(ss, status, '|');
+        getline(ss, token, '|');
+        if (stoi(token) < static_cast<int>(DeliveryStatus::PENDING_DISPATCH) && stoi(token) > static_cast<int>(DeliveryStatus::DELIVERED))
+        {
+            throw runtime_error("Invalid Delivery Status");
+        }
+        status = static_cast<DeliveryStatus>(stoi(token));
         getline(ss, address, '|');
         getline(ss, token, '|');
         storeId = stoi(token);

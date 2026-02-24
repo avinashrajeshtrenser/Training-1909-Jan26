@@ -52,6 +52,21 @@ string getProductStatusString(ProductStatus status)
     }
 }
 
+string getDeliveryStatusString(DeliveryStatus status)
+{
+    switch (status)
+    {
+    case DeliveryStatus::PENDING_DISPATCH:
+        return "Pending Dispatch";
+    case DeliveryStatus::IN_TRANSIT:
+        return "In Transit";
+    case DeliveryStatus::DELIVERED:
+        return "Delivered";
+    default:
+        return "Invalid Delivery Status";
+    }
+}
+
 bool WarehouseController::authorizeUser(const string& username, const string& password)
 {
     try
@@ -525,7 +540,7 @@ void WarehouseController::acceptDelivery()
                 continue;
             }
             newDelivery.assignVehicle(selectedVehicle);
-            newDelivery.updateDeliveryStatus("In Transit");
+            newDelivery.updateDeliveryStatus(DeliveryStatus::IN_TRANSIT);
             m_deliveries.push_back(newDelivery);
             cout << "Delivery " << deliveryId << " created for Store " << store->getStoreLocation() << "\n";
         }
@@ -549,7 +564,7 @@ void WarehouseController::updateDeliveryStatus()
         {
             if (iterator->getDeliveryId() == deliveryId)
             {
-                string currentStatus = iterator->getDeliveryStatus();
+                string currentStatus = getDeliveryStatusString(iterator->getDeliveryStatus());
                 cout << "Current status: " << currentStatus << "\n";
                 int choice;
                 cout << "Select new status:\n";
@@ -570,13 +585,13 @@ void WarehouseController::updateDeliveryStatus()
                 switch (choice)
                 {
                 case 1:
-                    iterator->updateDeliveryStatus("Dispatched");
+                    iterator->updateDeliveryStatus(DeliveryStatus::PENDING_DISPATCH);
                     break;
                 case 2:
-                    iterator->updateDeliveryStatus("In Transit");
+                    iterator->updateDeliveryStatus(DeliveryStatus::IN_TRANSIT);
                     break;
                 case 3:
-                    iterator->updateDeliveryStatus("Delivered");
+                    iterator->updateDeliveryStatus(DeliveryStatus::DELIVERED);
                     if (iterator->getVehicle())
                     {
                         iterator->getVehicle()->setIsAvailable(true);
@@ -610,7 +625,7 @@ void WarehouseController::listDeliveries() const
         for (vector<Delivery>::const_iterator iterator = m_deliveries.begin(); iterator != m_deliveries.end(); ++iterator)
         {
             cout << "-----------------------------------------------------\n";
-            cout << "\nDelivery ID: " << iterator->getDeliveryId() << " | Status: " << iterator->getDeliveryStatus() << " | Address: " << iterator->getDeliveryAddress() << "\n";
+            cout << "\nDelivery ID: " << iterator->getDeliveryId() << " | Status: " << getDeliveryStatusString(iterator->getDeliveryStatus()) << " | Address: " << iterator->getDeliveryAddress() << "\n";
             shared_ptr<Store> store = iterator->getStore();
             if (store)
             {

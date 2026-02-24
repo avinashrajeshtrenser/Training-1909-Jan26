@@ -5,7 +5,7 @@ int Delivery::getDeliveryId() const
     return m_deliveryId;
 }
 
-std::string Delivery::getDeliveryStatus() const
+DeliveryStatus Delivery::getDeliveryStatus() const
 {
     return m_deliveryStatus;
 }
@@ -20,7 +20,7 @@ std::vector<DeliveryItem>& Delivery::getItems()
     return m_items;
 }
 
-void Delivery::updateDeliveryStatus(const std::string& status)
+void Delivery::updateDeliveryStatus(DeliveryStatus status)
 {
     m_deliveryStatus = status;
 }
