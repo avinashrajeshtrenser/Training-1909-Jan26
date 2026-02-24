@@ -78,6 +78,9 @@
     <ClCompile Include="WarehouseController.cpp">
       <Filter>Controllers</Filter>
     </ClCompile>
+    <ClCompile Include="ReadUtility.cpp">
+      <Filter>Utility</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Admin.h">
@@ -127,6 +130,9 @@
     </ClInclude>
     <ClInclude Include="WarehouseController.h">
       <Filter>Controllers</Filter>
+    </ClInclude>
+    <ClInclude Include="ReadUtility.h">
+      <Filter>Utility</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

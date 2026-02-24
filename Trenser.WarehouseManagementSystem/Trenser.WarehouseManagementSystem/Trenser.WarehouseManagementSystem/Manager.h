@@ -1,24 +1,28 @@
 #pragma once
-#include <iostream>
 #include <vector>
+#include <memory>
 #include "User.h"
 #include "Delivery.h"
 #include "Vehicle.h"
 #include "Store.h"
+#include "WarehouseController.h"
+
 class Manager : public User
 {
 private:
-	std::vector<Delivery> m_deliveries;
-	std::vector<Vehicle> m_vehicle;
-	std::vector<Store> m_store;
+    std::vector<std::shared_ptr<Delivery>> m_deliveries;
+    std::vector<std::shared_ptr<Vehicle>> m_vehicles;
+    std::vector<std::shared_ptr<Store>> m_stores;
 public:
-	Manager() : m_deliveries(), m_vehicle(), m_store() {}
-	Manager(int userId, std::string userName, std::string password, std::string role) : User(userId, userName, password, role), m_deliveries(), m_vehicle(), m_store() {}
-	std::vector<Vehicle> getAllManagedVehicles();
-	std::vector<Store> getAllManagedStore();
-	std::vector<Delivery> getAllDelivery();
-	void dispatchProduct();
-	void addstore(Store& store);
-	void addVehicle(Vehicle& vehicle);
+    Manager() : User(), m_deliveries(), m_vehicles(), m_stores() {}
+    Manager(int userId, const std::string& userName, const std::string& password, const std::string& role = "Manager")
+        : User(userId, userName, password, role), m_deliveries(), m_vehicles(), m_stores() {}
+    std::vector<std::shared_ptr<Vehicle>>& getAllManagedVehicles();
+    std::vector<std::shared_ptr<Store>>& getAllManagedStores();
+    std::vector<std::shared_ptr<Delivery>>& getAllDeliveries();
+    void addStore(const std::shared_ptr<Store>& store);
+    void addVehicle(const std::shared_ptr<Vehicle>& vehicle);
+    void addDelivery(const std::shared_ptr<Delivery>& delivery);
+    void requestDispatch(WarehouseController& controller);
+    void viewDeliveries(const WarehouseController& controller) const;
 };
-

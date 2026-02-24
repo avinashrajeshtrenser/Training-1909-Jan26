@@ -1,0 +1,3 @@
+101|Admin|admin|Admin|Active
+102|Manager|manager|Manager|Active
+103|Staff|staff|Staff|Active
