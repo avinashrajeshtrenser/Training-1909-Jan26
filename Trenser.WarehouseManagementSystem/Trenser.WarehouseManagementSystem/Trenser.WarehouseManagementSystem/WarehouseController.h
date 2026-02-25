@@ -43,6 +43,10 @@ public:
     void removeProduct();
     void removeVehicle();
     void removeStore();
+    std::shared_ptr<Product> selectProduct(int productId); 
+    std::shared_ptr<Store> selectStore(int storeId);
+    bool validateStock(std::shared_ptr<Product> product, int quantity); 
+    void queueDispatch(std::shared_ptr<Product> product, std::shared_ptr<Store> store, int quantity);
     void dispatchProduct();
     void acceptDelivery();
     void updateDeliveryStatus();

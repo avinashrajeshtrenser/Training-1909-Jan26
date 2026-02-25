@@ -15,7 +15,7 @@ void ManagerMenu::showMenu()
     cout << "8. List Products\n";
     cout << "9. List Stores\n";
     cout << "10. List Vehicles\n";
-    cout << "11. List Dispatch Pending\n";
+    cout << "11. List Dispatch Pending Items\n";
     cout << "12. List Deliveries\n";
     cout << "13. Logout\n";
 }
