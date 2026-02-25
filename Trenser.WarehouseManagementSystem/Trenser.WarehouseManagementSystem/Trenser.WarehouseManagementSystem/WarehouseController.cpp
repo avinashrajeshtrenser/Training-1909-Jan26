@@ -3,6 +3,14 @@ using namespace std;
 #include "Manager.h"
 #include "Staff.h"
 
+const std::string WarehouseController::PRODUCT_FILE = "Product.txt";
+const std::string WarehouseController::VEHICLE_FILE = "Vehicle.txt";
+const std::string WarehouseController::STORE_FILE = "Store.txt";
+const std::string WarehouseController::USER_FILE = "User.txt";
+const std::string WarehouseController::DELIVERY_FILE = "Delivery.txt";
+const std::string WarehouseController::DISPATCH_FILE = "DispatchPendingItems.txt";
+const std::string WarehouseController::DAMAGED_FILE = "DamagedProduct.txt";
+
 void WarehouseController::controllerMenu() {
     int choice;
     do
@@ -142,7 +150,7 @@ void WarehouseController::addUser() {
         readString(password);
         cout << "Select Role:\n1. Manager\n2. Staff\n\nEnter choice: ";
         readValue<int>(roleChoice);
-        std::shared_ptr<User> newUser;
+        shared_ptr<User> newUser;
         int userId = static_cast<int>(m_users.size()) + 101;
         switch (roleChoice)
         {
@@ -386,15 +394,13 @@ void WarehouseController::listUsers() const
         cout << "--- User List ---\n";
         for (auto iterator = m_users.begin(); iterator != m_users.end(); ++iterator)
         {
-            if ((*iterator)->getUserStatus() == "Removed")
+            if (!(*iterator)->isActive())
             {
                 continue;
             }
-            cout << "User ID: " << (*iterator)->getUserId()
-                << " | Username: " << (*iterator)->getUserName()
-                << " | Role: " << (*iterator)->getRole()
-                << " | Status: " << (*iterator)->getUserStatus()
-                << "\n";
+            cout << "User ID: " << (*iterator)->getUserId() << " | Username: " << (*iterator)->getUserName() 
+                << " | Role: " << (*iterator)->getRole() << " | Status: " << ((*iterator)->isActive() ? "Active" : "Removed") << "\n";
+
         }
     }
     catch (const exception& e)
@@ -419,11 +425,8 @@ void WarehouseController::listVehicles() const
             {
                 continue;
             }
-            cout << "Vehicle ID: " << (*iterator)->getVehicleId()
-                << " | Driver: " << (*iterator)->getdriverName()
-                << " | Capacity: " << (*iterator)->getcapacity()
-                << " | Available: " << ((*iterator)->getIsAvailable() ? "Yes" : "No")
-                << "\n";
+            cout << "Vehicle ID: " << (*iterator)->getVehicleId() << " | Driver: " << (*iterator)->getdriverName()
+                << " | Capacity: " << (*iterator)->getcapacity()<< " | Available: " << ((*iterator)->getIsAvailable() ? "Yes" : "No") << "\n";
         }
     }
     catch (const exception& e)
@@ -448,12 +451,8 @@ void WarehouseController::listProducts() const
             {
                 continue;
             }
-            cout << "Product ID: " << (*iterator)->getProductId()
-                << " | Name: " << (*iterator)->getProductName()
-                << " | Stock: " << (*iterator)->getStockQuantity()
-                << " | Quality Score: " << (*iterator)->getQualityScore()
-                << " | Status: " << getProductStatusString((*iterator)->getStatus())
-                << "\n";
+            cout << "Product ID: " << (*iterator)->getProductId() << " | Name: " << (*iterator)->getProductName() << " | Stock: " << (*iterator)->getStockQuantity()
+                << " | Quality Score: " << (*iterator)->getQualityScore() << " | Status: " << getProductStatusString((*iterator)->getStatus()) << "\n";
         }
     }
     catch (const exception& e)
@@ -478,10 +477,8 @@ void WarehouseController::listStores() const
             {
                 continue;
             }
-            cout << "Store ID: " << (*iterator)->getStoreId()
-                << " | Name: " << (*iterator)->getStoreName()
-                << " | Location: " << (*iterator)->getStoreLocation()
-                << "\n";
+            cout << "Store ID: " << (*iterator)->getStoreId() << " | Name: " << (*iterator)->getStoreName()
+                << " | Location: " << (*iterator)->getStoreLocation() << "\n";
         }
     }
     catch (const exception& e)
@@ -505,11 +502,8 @@ void WarehouseController::listDispatchPendingItems() const
             shared_ptr<Product> product = iterator->getProduct();
             if (product)
             {
-                cout << "Product ID: " << product->getProductId()
-                    << " | Name: " << product->getProductName()
-                    << " | Quantity: " << iterator->getQuantity()
-                    << " | Status: " << getProductStatusString(product->getStatus())
-                    << "\n";
+                cout << "Product ID: " << product->getProductId() << " | Name: " << product->getProductName()
+                    << " | Quantity: " << iterator->getQuantity() << " | Status: " << getProductStatusString(product->getStatus()) << "\n";
             }
         }
     }
@@ -517,73 +511,105 @@ void WarehouseController::listDispatchPendingItems() const
     {
         cout << e.what() << "\n";
     }
+}
+
+bool WarehouseController::hasPendingItem() const
+{
+    return !m_dispatchPendingProduct.empty();
+}
+
+map<shared_ptr<Store>, vector<DeliveryItem>> WarehouseController::groupItemsByStore() const
+{
+    map<shared_ptr<Store>, vector<DeliveryItem>> storeGroups;
+    for (const auto& item : m_dispatchPendingProduct) 
+    {
+        if (item.getProduct()->getStatus() == ProductStatus::APPROVED) 
+        {
+            storeGroups[item.getStore()].push_back(item);
+        }
+    }
+    return storeGroups;
+}
+
+Delivery WarehouseController::createDeliveryForStore(const shared_ptr<Store>& store, const vector<DeliveryItem>& items)
+{
+    int deliveryId = static_cast<int>(m_deliveries.size()) + 101;
+    Delivery newDelivery(deliveryId, store->getStoreLocation(), store, nullptr);
+    for (const auto& item : items)
+    {
+        newDelivery.getItems().push_back(item);
+    }
+    return newDelivery;
+}
+
+shared_ptr<Vehicle> WarehouseController::selectVehicleForStore(const shared_ptr<Store>& store) 
+{
+    int vehicleId;
+    listVehicles();
+    cout << "Enter Vehicle ID to assign for Store " << store->getStoreLocation() << ": ";
+    readValue<int>(vehicleId);
+    for (auto& vehicle : m_vehicles)
+    {
+        if (vehicle->getVehicleId() == vehicleId && vehicle->getIsAvailable() && vehicle->isActive())
+        {
+            vehicle->setIsAvailable(false);
+            return vehicle;
+        }
+    }
+    cout << "Vehicle not available. Skipping store.\n";
+    return nullptr;
+}
+
+void WarehouseController::	confirmAndSaveDelivery(Delivery& delivery, const shared_ptr<Vehicle>& vehicle) 
+{
+    delivery.assignVehicle(vehicle);
+    delivery.updateDeliveryStatus(DeliveryStatus::IN_TRANSIT);
+    m_deliveries.push_back(delivery);
+    cout << "Delivery " << delivery.getDeliveryId() << " created for Store " << delivery.getStore()->getStoreLocation() << "\n";
+}
+
+void WarehouseController::removeApprovedItemsFromQueue() 
+{
+    m_dispatchPendingProduct.erase(
+        remove_if(m_dispatchPendingProduct.begin(), m_dispatchPendingProduct.end(),
+            [](const DeliveryItem& item) {
+                return item.getProduct()->getStatus() == ProductStatus::APPROVED;
+            }),
+        m_dispatchPendingProduct.end()
+    );
 }
 
 void WarehouseController::dispatchDelivery()
 {
-    int deliveryId, vehicleId;
-    shared_ptr<Vehicle> selectedVehicle = nullptr;
     try
     {
-        if (m_dispatchPendingProduct.empty())
+        if (!hasPendingItem())
         {
+            cout << "No items pending delivery.\n";
             cout << "No items pending delivery.\n";
             return;
         }
-        map<shared_ptr<Store>, vector<DeliveryItem>> storeGroups;
-        for (auto iterator = m_dispatchPendingProduct.begin(); iterator != m_dispatchPendingProduct.end(); ++iterator)
+        auto storeGroups = groupItemsByStore();
+        for (auto& storeGroup : storeGroups)
         {
-            if (iterator->getProduct()->getStatus() == ProductStatus::APPROVED) {
-                storeGroups[iterator->getStore()].push_back(*iterator);
-            }
-        }
-        for (auto storeIterator = storeGroups.begin(); storeIterator != storeGroups.end(); ++storeIterator)
-        {
-            shared_ptr<Store> store = storeIterator->first;
-            vector<DeliveryItem>& items = storeIterator->second;
-            deliveryId = static_cast<int>(m_deliveries.size()) + 1;
-            shared_ptr<Vehicle> nullVehicle = nullptr;
-            Delivery newDelivery(deliveryId, store->getStoreLocation(), store, nullVehicle);
-            for (auto itemIterator = items.begin(); itemIterator != items.end(); ++itemIterator)
+            shared_ptr<Store> store = storeGroup.first;  
+            vector<DeliveryItem>& items = storeGroup.second; 
+
+            Delivery newDelivery = createDeliveryForStore(store, items); 
+            auto vehicle = selectVehicleForStore(store);           
+            if (!vehicle)
             {
-                newDelivery.getItems().push_back(*itemIterator);
-            }
-            listVehicles();
-            cout << "Enter Vehicle ID to assign for Store " << store->getStoreLocation() << ": ";
-            readValue<int>(vehicleId);
-            for (auto vehicleIterator = m_vehicles.begin(); vehicleIterator != m_vehicles.end(); ++vehicleIterator)
-            {
-                if ((*vehicleIterator)->getVehicleId() == vehicleId && (*vehicleIterator)->getIsAvailable() && (*vehicleIterator)->isActive())
-                {
-                    (*vehicleIterator)->setIsAvailable(false);
-                    selectedVehicle = *vehicleIterator;
-                    break;
-                }
-            }
-            if (!selectedVehicle)
-            {
-                cout << "Vehicle not available. Skipping store.\n";
                 continue;
             }
-            newDelivery.assignVehicle(selectedVehicle);
-            newDelivery.updateDeliveryStatus(DeliveryStatus::IN_TRANSIT);
-            m_deliveries.push_back(newDelivery);
-            cout << "Delivery " << deliveryId << " created for Store " << store->getStoreLocation() << "\n";
+            confirmAndSaveDelivery(newDelivery, vehicle);
         }
-        m_dispatchPendingProduct.erase(
-            remove_if(m_dispatchPendingProduct.begin(), m_dispatchPendingProduct.end(),
-                [](const DeliveryItem& item) {
-                    return item.getProduct()->getStatus() == ProductStatus::APPROVED;
-                }),
-            m_dispatchPendingProduct.end()
-        );
-
     }
     catch (const exception& e)
     {
         cout << e.what() << "\n";
     }
 }
+
 
 void WarehouseController::updateDeliveryStatus()
 {
@@ -662,12 +688,12 @@ void WarehouseController::listDeliveries() const
             shared_ptr<Store> store = iterator->getStore();
             if (store)
             {
-                cout << "\nStore ID: " << store->getStoreId() << " | Store Name: " << store->getStoreName() << " | Location: " << store->getStoreLocation() << "\n";
+                cout << "Store ID: " << store->getStoreId() << " | Store Name: " << store->getStoreName() << " | Location: " << store->getStoreLocation() << "\n";
             }
             shared_ptr<Vehicle> vehicle = iterator->getVehicle();
             if (vehicle)
             {
-                cout << "\nVehicle ID: " << vehicle->getVehicleId() << " | Driver Name: " << vehicle->getdriverName() << " | Available: " << (vehicle->getIsAvailable() ? "Yes" : "No") << "\n";
+                cout << "Vehicle ID: " << vehicle->getVehicleId() << " | Driver Name: " << vehicle->getdriverName() << " | Available: " << (vehicle->getIsAvailable() ? "Yes" : "No") << "\n";
             }
             cout << "\nItems:\n";
             const vector<DeliveryItem>& items = iterator->getItems();
@@ -705,7 +731,7 @@ void WarehouseController::removeUser()
         {
             if ((*iterator)->getUserId() == userId && (*iterator)->getRole() != "Admin")
             {
-                (*iterator)->updateUserStatus("Removed");
+                (*iterator)->setIsActive(false);
                 cout << "User '" << (*iterator)->getUserName() << "' removed successfully.\n";
                 return;
             }
@@ -843,24 +869,24 @@ void WarehouseController::performQualityCheck()
 
 void WarehouseController::loadSystem()
 {
-    fileManager.loadVector(m_products, "Product.txt");
-    fileManager.loadVector(m_vehicles, "Vehicle.txt");
-    fileManager.loadVector(m_stores, "Store.txt");
-    fileManager.loadVector(m_users, "User.txt");
-    fileManager.loadDeliveries(m_deliveries, m_stores, m_vehicles, m_products, "Delivery.txt");
-    fileManager.loadDispatchQueue(m_dispatchPendingProduct, m_products, m_stores, "DispatchPendingItems.txt");
-    fileManager.loadRejectedItems(m_damagedProducts, m_products, m_stores, "DamagedProduct.txt");
+    fileManager.loadVector(m_products, PRODUCT_FILE);
+    fileManager.loadVector(m_vehicles, VEHICLE_FILE);
+    fileManager.loadVector(m_stores, STORE_FILE);
+    fileManager.loadVector(m_users, USER_FILE);
+    fileManager.loadDeliveries(m_deliveries, m_stores, m_vehicles, m_products, DELIVERY_FILE);
+    fileManager.loadDispatchQueue(m_dispatchPendingProduct, m_products, m_stores, DISPATCH_FILE);
+    fileManager.loadRejectedItems(m_damagedProducts, m_products, m_stores, DAMAGED_FILE);
 }
 
 void WarehouseController::saveSystem()
 {
-    fileManager.saveVector(m_products, "Product.txt");
-    fileManager.saveVector(m_vehicles, "Vehicle.txt");
-    fileManager.saveVector(m_stores, "Store.txt");
-    fileManager.saveVector(m_users, "User.txt");
-    fileManager.saveDeliveries(m_deliveries, "Delivery.txt");
-    fileManager.saveDispatchQueue(m_dispatchPendingProduct, "DispatchPendingItems.txt");
-    fileManager.saveRejectedItems(m_damagedProducts, "DamagedProduct.txt");
+    fileManager.saveVector(m_products, PRODUCT_FILE);
+    fileManager.saveVector(m_vehicles, VEHICLE_FILE);
+    fileManager.saveVector(m_stores, STORE_FILE);
+    fileManager.saveVector(m_users, USER_FILE);
+    fileManager.saveDeliveries(m_deliveries, DELIVERY_FILE);
+    fileManager.saveDispatchQueue(m_dispatchPendingProduct, DISPATCH_FILE);
+    fileManager.saveRejectedItems(m_damagedProducts, DAMAGED_FILE);
 }
 
 vector<shared_ptr<Product>>& WarehouseController::getProducts()

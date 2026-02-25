@@ -11,14 +11,14 @@ int User::getUserId() const
     return m_userId;
 }
 
-string User::getUserStatus()
+bool User::isActive()
 {
-    return m_userStatus;
+    return m_isActive;
 }
 
-void User::updateUserStatus(string status)
+void User::setIsActive(bool status)
 {
-    m_userStatus = status;
+    m_isActive = status;
 }
 
 string User::getUserName()
@@ -51,35 +51,35 @@ string User::serialize()
         m_userName + "|" +
         m_password + "|" +
         role + "|" +
-        m_userStatus;
+        to_string(m_isActive);
 }
 
 std::shared_ptr<User> User::deserialize(const string& line)
 {
-    stringstream ss(line);
+    stringstream userStream(line);
     string token;
     int id;
     string name, password, role, status;
-    getline(ss, token, '|'); id = stoi(token);
-    getline(ss, name, '|');
-    getline(ss, password, '|');
-    getline(ss, role, '|');
-    getline(ss, status, '|');
+    getline(userStream, token, '|');
+    id = stoi(token);
+    getline(userStream, name, '|');
+    getline(userStream, password, '|');
+    getline(userStream, role, '|');
+    getline(userStream, status, '|');
     std::shared_ptr<User> user;
     if (role == "Manager")
     {
         user = std::make_shared<Manager>(id, name, password);
-        user->updateUserStatus(status);
     }
     else if (role == "Staff")
     {
         user = std::make_shared<Staff>(id, name, password);
-        user->updateUserStatus(status);
     }
     else if (role == "Admin")
     {
         user = std::make_shared<Admin>(id, name, password);
-        user->updateUserStatus(status);
     }
+    user->setIsActive(stoi(token));
     return user;
 }
+

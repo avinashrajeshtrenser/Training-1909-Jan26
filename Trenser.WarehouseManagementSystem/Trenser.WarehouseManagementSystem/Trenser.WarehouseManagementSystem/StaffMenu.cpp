@@ -6,7 +6,7 @@ void StaffMenu::showMenu()
 {
     cout << "\n=== Staff Menu ===\n";
     cout << "1. Perform Quality Check\n";
-    cout << "2. Accept Delivery Task\n";
+    cout << "2. Dispatch Delivery\n";
     cout << "3. Update Delivery Status\n";
     cout << "4. List Products\n";
     cout << "5. List Stores\n";

@@ -51,19 +51,19 @@ Vehicle Vehicle::deserialize(const string& line)
 {
     try
     {
-        stringstream ss(line);
+        stringstream vehicleStream(line);
         string token;
         int id, capacity;
         bool isAvailable, isActive;
         string driver;
-        getline(ss, token, '|');
+        getline(vehicleStream, token, '|');
         id = stoi(token);
-        getline(ss, driver, '|');
-        getline(ss, token, '|');
+        getline(vehicleStream, driver, '|');
+        getline(vehicleStream, token, '|');
         capacity = stoi(token);
-        getline(ss, token, '|');
+        getline(vehicleStream, token, '|');
         isAvailable = stoi(token);
-        getline(ss, token, '|');
+        getline(vehicleStream, token, '|');
         isActive = stoi(token);
         Vehicle vehicle(id, driver, capacity, isAvailable);
         vehicle.setIsActive(isActive);

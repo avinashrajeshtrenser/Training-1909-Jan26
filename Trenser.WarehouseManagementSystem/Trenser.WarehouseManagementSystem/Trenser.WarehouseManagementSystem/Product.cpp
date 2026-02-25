@@ -7,10 +7,12 @@ int Product::getProductId() const
 {
     return m_productId;
 }
+
 int Product::getStockQuantity() const
 {
     return m_stockQuantity;
 }
+
 int Product::getQualityScore() const
 {
     return m_qualityScore;
@@ -53,10 +55,13 @@ Product Product::deserialize(const string& line)
         string token;
         int id, stock, quality, statusInt;
         string name;
-        getline(ss, token, '|'); id = stoi(token);
+        getline(ss, token, '|'); 
+        id = stoi(token);
         getline(ss, name, '|');
-        getline(ss, token, '|'); stock = stoi(token);
-        getline(ss, token, '|'); quality = stoi(token);
+        getline(ss, token, '|'); 
+        stock = stoi(token);
+        getline(ss, token, '|'); 
+        quality = stoi(token);
         getline(ss, token, '|');
         statusInt = stoi(token);
         if (statusInt < static_cast<int>(ProductStatus::ACTIVE) && statusInt > static_cast<int>(ProductStatus::REMOVED))

@@ -39,14 +39,15 @@ Store Store::deserialize(const string& line)
 {
     try
     {
-        stringstream ss(line);
+        stringstream storeStream(line);
         string token;
         int id;
         string name, location;
-        getline(ss, token, '|'); id = stoi(token);
-        getline(ss, name, '|');
-        getline(ss, location, '|');
-        getline(ss, token, '|');
+        getline(storeStream, token, '|'); 
+        id = stoi(token);
+        getline(storeStream, name, '|');
+        getline(storeStream, location, '|');
+        getline(storeStream, token, '|');
         Store store(id, name, location);
         store.setIsActive(stoi(token));
         return store;

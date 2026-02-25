@@ -11,7 +11,7 @@ void ManagerMenu::showMenu()
     cout << "4. Remove Vehicle\n";
     cout << "5. Add Store\n";
     cout << "6. Remove Store\n";
-    cout << "7. Dispatch Delivery\n";
+    cout << "9. Add to Dispatch Queue\n";
     cout << "8. List Products\n";
     cout << "9. List Stores\n";
     cout << "10. List Vehicles\n";
@@ -29,7 +29,6 @@ void ManagerMenu::handleOperation(WarehouseController& controller)
         cout << "\nEnter The choice : ";
         cin >> choice;
         cout << endl;
-
         switch (choice)
         {
         case 1: controller.addProduct(); break;

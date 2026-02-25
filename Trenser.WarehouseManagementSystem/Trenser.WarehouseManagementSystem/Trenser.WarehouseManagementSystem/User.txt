@@ -1,3 +1,4 @@
-101|Admin|admin|Admin|Active
-102|Manager|manager|Manager|Active
-103|Staff|staff|Staff|Active
+101|Admin|admin|Admin|1
+102|Manager|manager|Manager|1
+103|Staff|staff|Staff|1
+104|Johann|jojo|Manager|0

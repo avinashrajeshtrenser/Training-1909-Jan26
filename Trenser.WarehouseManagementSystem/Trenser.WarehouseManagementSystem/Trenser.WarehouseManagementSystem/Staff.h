@@ -1,15 +1,11 @@
 #pragma once
-#include <iostream>
-#include <vector>
 #include "User.h"
-#include "Delivery.h"
-class Staff : public User
-{
-private:
-	std::vector<Delivery> m_delivery;
+
+class Staff : public User {
 public:
-	Staff() : m_delivery() {}
-	Staff(int userId, std::string userName, std::string password) : User(userId, userName, password), m_delivery() {}
+    Staff(int userId, const std::string& userName, const std::string& password)
+        : User(userId, userName, password) {
+    }
+
     std::string getRole() const override;
 };
-

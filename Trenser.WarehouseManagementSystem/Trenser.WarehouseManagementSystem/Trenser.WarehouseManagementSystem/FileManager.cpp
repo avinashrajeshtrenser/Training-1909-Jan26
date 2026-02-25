@@ -39,86 +39,93 @@ void FileManager::saveDeliveries(const vector<Delivery>& deliveries, const strin
 
 void FileManager::loadDeliveries(vector<Delivery>& deliveries, const vector<shared_ptr<Store>>& stores, const vector<shared_ptr<Vehicle>>& vehicles, const vector<shared_ptr<Product>>& products, const string& fileName)
 {
-    ifstream file(fileName);
-    if (!file)
+    try
     {
-        return;
-    }
-    deliveries.clear();
-    string line;
-    while (getline(file, line))
-    {
-        stringstream ss(line);
-        string token;
-        int deliveryId;
-        DeliveryStatus status;
-        string address;
-        int storeId;
-        int vehicleId;
-        string itemsPart;
-        getline(ss, token, '|');
-        deliveryId = stoi(token);
-        getline(ss, token, '|');
-        if (stoi(token) < static_cast<int>(DeliveryStatus::PENDING_DISPATCH) && stoi(token) > static_cast<int>(DeliveryStatus::DELIVERED))
+        ifstream file(fileName);
+        if (!file)
         {
-            throw runtime_error("Invalid Delivery Status");
+            return;
         }
-        status = static_cast<DeliveryStatus>(stoi(token));
-        getline(ss, address, '|');
-        getline(ss, token, '|');
-        storeId = stoi(token);
-        getline(ss, token, '|');
-        vehicleId = stoi(token);
-        getline(ss, itemsPart);
-        shared_ptr<Store> store = nullptr;
-        shared_ptr<Vehicle> vehicle = nullptr;
-        for (auto storeIterator = stores.begin(); storeIterator != stores.end(); ++storeIterator)
+        deliveries.clear();
+        string line;
+        while (getline(file, line))
         {
-            if ((*storeIterator)->getStoreId() == storeId)
+            stringstream deliveryStream(line);
+            string token;
+            int deliveryId;
+            DeliveryStatus status;
+            string address;
+            int storeId;
+            int vehicleId;
+            string itemsPart;
+            getline(deliveryStream, token, '|');
+            deliveryId = stoi(token);
+            getline(deliveryStream, token, '|');
+            if (stoi(token) < static_cast<int>(DeliveryStatus::PENDING_DISPATCH) && stoi(token) > static_cast<int>(DeliveryStatus::DELIVERED))
             {
-                store = *storeIterator;
-                break;
+                throw runtime_error("Invalid Delivery Status");
             }
-        }
-        for (auto vehicleIterator = vehicles.begin(); vehicleIterator != vehicles.end(); ++vehicleIterator)
-        {
-            if ((*vehicleIterator)->getVehicleId() == vehicleId)
+            status = static_cast<DeliveryStatus>(stoi(token));
+            getline(deliveryStream, address, '|');
+            getline(deliveryStream, token, '|');
+            storeId = stoi(token);
+            getline(deliveryStream, token, '|');
+            vehicleId = stoi(token);
+            getline(deliveryStream, itemsPart);
+            shared_ptr<Store> store = nullptr;
+            shared_ptr<Vehicle> vehicle = nullptr;
+            for (auto storeIterator = stores.begin(); storeIterator != stores.end(); ++storeIterator)
             {
-                vehicle = *vehicleIterator;
-                break;
-            }
-        }
-        Delivery delivery(deliveryId, address, store, vehicle);
-        delivery.updateDeliveryStatus(status);
-        if (!itemsPart.empty())
-        {
-            stringstream itemsStream(itemsPart);
-            string itemToken;
-            while (getline(itemsStream, itemToken, ','))
-            {
-                size_t separatorPosition = itemToken.find(':');
-                if (separatorPosition != string::npos)
+                if ((*storeIterator)->getStoreId() == storeId)
                 {
-                    int productId = stoi(itemToken.substr(0, separatorPosition));
-                    int quantity = stoi(itemToken.substr(separatorPosition + 1));
-                    shared_ptr<Product> matchedProduct = nullptr;
-                    for (vector<shared_ptr<Product>>::const_iterator productIterator = products.begin(); productIterator != products.end(); ++productIterator)
+                    store = *storeIterator;
+                    break;
+                }
+            }
+            for (auto vehicleIterator = vehicles.begin(); vehicleIterator != vehicles.end(); ++vehicleIterator)
+            {
+                if ((*vehicleIterator)->getVehicleId() == vehicleId)
+                {
+                    vehicle = *vehicleIterator;
+                    break;
+                }
+            }
+            Delivery delivery(deliveryId, address, store, vehicle);
+            delivery.updateDeliveryStatus(status);
+            if (!itemsPart.empty())
+            {
+                stringstream itemsStream(itemsPart);
+                string itemToken;
+                while (getline(itemsStream, itemToken, ','))
+                {
+                    size_t separatorPosition = itemToken.find(':');
+                    if (separatorPosition != string::npos)
                     {
-                        if ((*productIterator)->getProductId() == productId)
+                        int productId = stoi(itemToken.substr(0, separatorPosition));
+                        int quantity = stoi(itemToken.substr(separatorPosition + 1));
+                        shared_ptr<Product> matchedProduct = nullptr;
+                        for (vector<shared_ptr<Product>>::const_iterator productIterator = products.begin(); productIterator != products.end(); ++productIterator)
                         {
-                            matchedProduct = *productIterator;
-                            break;
+                            if ((*productIterator)->getProductId() == productId)
+                            {
+                                matchedProduct = *productIterator;
+                                break;
+                            }
                         }
-                    }
-                    if (matchedProduct && store)
-                    {
-                        DeliveryItem deliveryItem(quantity, matchedProduct, store);
-                        delivery.getItems().push_back(deliveryItem);
+                        if (matchedProduct && store)
+                        {
+                            DeliveryItem deliveryItem(quantity, matchedProduct, store);
+                            delivery.getItems().push_back(deliveryItem);
+                        }
                     }
                 }
             }
+            deliveries.push_back(delivery);
         }
-        deliveries.push_back(delivery);
+    }
+    catch (const exception& e)
+    {
+        cout << e.what() << "Error parsing line./n";
     }
 }
 void FileManager::saveDispatchQueue(const vector<DeliveryItem>& dispatchQueue, const string& fileName)
@@ -144,16 +151,16 @@ void FileManager::loadDispatchQueue(vector<DeliveryItem>& dispatchQueue, const v
     string line;
     while (getline(file, line))
     {
-        stringstream ss(line);
+        stringstream queueStream(line);
         string token;
         int productId;
         int storeId;
         int quantity;
-        getline(ss, token, '|');
+        getline(queueStream, token, '|');
         productId = stoi(token);
-        getline(ss, token, '|');
+        getline(queueStream, token, '|');
         storeId = stoi(token);
-        getline(ss, token, '|');
+        getline(queueStream, token, '|');
         quantity = stoi(token);
         shared_ptr<Product> matchedProduct = nullptr;
         shared_ptr<Store> matchedStore = nullptr;

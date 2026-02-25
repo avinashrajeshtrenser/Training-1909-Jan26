@@ -8,8 +8,9 @@ int main()
         WarehouseController* controller = new WarehouseController();
         controller->loadSystem();
         controller->controllerMenu();
+        delete controller;
     }
-    catch (...)
+    catch (const exception& e)
     {
         cout << "Exception Occured.\n";
     }

@@ -13,8 +13,8 @@ void AdminMenu::showMenu()
     cout << "6. Remove Vehicle\n";
     cout << "7. Add Store\n";
     cout << "8. Remove Store\n";
-    cout << "9. Dispatch Delivery\n";
-    cout << "10. Accept Delivery\n";
+    cout << "9. Add to Dispatch Queue\n"; 
+    cout << "10. Dispatch Delivery\n";
     cout << "11. Perform Quality Check\n";
     cout << "12. List Products\n";
     cout << "13. List Stores\n";
