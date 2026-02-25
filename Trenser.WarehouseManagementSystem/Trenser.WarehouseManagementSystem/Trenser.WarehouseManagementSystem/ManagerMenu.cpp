@@ -38,7 +38,7 @@ void ManagerMenu::handleOperation(WarehouseController& controller)
         case 4: controller.removeVehicle(); break;
         case 5: controller.addStore(); break;
         case 6: controller.removeStore(); break;
-        case 7: controller.dispatchProduct(); break;
+        case 7: controller.addToDispatchQueue(); break;
         case 8: controller.listProducts(); break;
         case 9: controller.listStores(); break;
         case 10: controller.listVehicles(); break;

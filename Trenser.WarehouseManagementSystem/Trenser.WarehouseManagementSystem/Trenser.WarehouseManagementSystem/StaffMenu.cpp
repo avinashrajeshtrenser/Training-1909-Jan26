@@ -28,7 +28,7 @@ void StaffMenu::handleOperation(WarehouseController& controller)
         switch (choice)
         {
         case 1: controller.performQualityCheck(); break;
-        case 2: controller.acceptDelivery(); break;
+        case 2: controller.dispatchDelivery(); break;
         case 3: controller.updateDeliveryStatus(); break;
         case 4: controller.listProducts(); break;
         case 5: controller.listStores(); break;

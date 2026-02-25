@@ -41,8 +41,8 @@ void AdminMenu::handleOperation(WarehouseController& controller)
         case 6: controller.removeVehicle(); break;
         case 7: controller.addStore(); break;
         case 8: controller.removeStore(); break;
-        case 9: controller.dispatchProduct(); break;
-        case 10: controller.acceptDelivery(); break;
+        case 9: controller.addToDispatchQueue(); break;
+        case 10: controller.dispatchDelivery(); break;
         case 11: controller.performQualityCheck(); break;
         case 12: controller.listProducts(); break;
         case 13: controller.listStores(); break;

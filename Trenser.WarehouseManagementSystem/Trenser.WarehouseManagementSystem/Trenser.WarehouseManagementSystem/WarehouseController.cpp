@@ -327,7 +327,7 @@ void WarehouseController::queueDispatch(shared_ptr<Product> product, shared_ptr<
     cout << "Product '" << product->getProductName() << "' queued for quality check before dispatch to Store '" << store->getStoreName() << "'.\n";
 }
 
-void WarehouseController::dispatchProduct() {
+void WarehouseController::addToDispatchQueue() {
     try 
     {
         if (m_products.empty()) 
@@ -373,78 +373,6 @@ void WarehouseController::dispatchProduct() {
         cout << e.what() << "\n";
     }
 }
-
-
-//void WarehouseController::dispatchProduct() 
-//{
-//    int productId, storeId, quantity;
-//    shared_ptr<Product> selectedProduct = nullptr;
-//    shared_ptr<Store> selectedStore = nullptr;
-//    try
-//    {
-//        if (m_products.empty())
-//        {
-//            cout << "No product available to assign.\n";
-//            return;
-//        }
-//        listProducts();
-//        cout << "Enter the Product Id: ";
-//        readValue<int>(productId);
-//        for (auto productIterator = m_products.begin(); productIterator != m_products.end(); ++productIterator)
-//        {
-//            if ((*productIterator)->getProductId() == productId && (*productIterator)->getStatus() != ProductStatus::REMOVED)
-//            {
-//                selectedProduct = *productIterator;
-//                break;
-//            }
-//        }
-//        if (!selectedProduct)
-//        {
-//            cout << "Error: Product '" << productId << "' not found.\n";
-//            return;
-//        }
-//        if (m_stores.empty())
-//        {
-//            cout << "No stores available to assign.\n";
-//            return;
-//        }
-//        listStores();
-//        cout << "Enter the Store Id: ";
-//        readValue<int>(storeId);
-//        for (auto storeIterator = m_stores.begin(); storeIterator != m_stores.end(); ++storeIterator)
-//        {
-//            if ((*storeIterator)->getStoreId() == storeId && (*storeIterator)->isActive())
-//            {
-//                selectedStore = *storeIterator;
-//                break;
-//            }
-//        }
-//        if (!selectedStore)
-//        {
-//            cout << "Error: Store '" << storeId << "' not found.\n";
-//            return;
-//        }
-//        cout << "Enter the Quantity: ";
-//        readValue<int>(quantity);
-//        if (selectedProduct->getStockQuantity() < quantity)
-//        {
-//            cout << "Error: Not enough stock for Product '" << productId << "'.\n";
-//            return;
-//        }
-//        DeliveryItem item(quantity, selectedProduct, selectedStore);
-//        m_dispatchPendingProduct.push_back(item);
-//        selectedProduct->updateStock(-quantity);
-//        if (selectedProduct->getStockQuantity() == 0)
-//        {
-//            selectedProduct->updateStatus(ProductStatus::OUT_OF_STOCK);
-//        }
-//        cout << "Product '" << selectedProduct->getProductName() << "' queued for quality check before dispatch to Store '" << selectedStore->getStoreName() << "'.\n";
-//    }
-//    catch (const exception& e)
-//    {
-//        cout << e.what() << "\n";
-//    }
-//}
 
 void WarehouseController::listUsers() const 
 {
@@ -591,7 +519,7 @@ void WarehouseController::listDispatchPendingItems() const
     }
 }
 
-void WarehouseController::acceptDelivery()
+void WarehouseController::dispatchDelivery()
 {
     int deliveryId, vehicleId;
     shared_ptr<Vehicle> selectedVehicle = nullptr;
