@@ -280,7 +280,8 @@ void WarehouseController::addStore()
     }
 }
 
-void WarehouseController::dispatchProduct() {
+void WarehouseController::dispatchProduct() 
+{
     int productId, storeId, quantity;
     shared_ptr<Product> selectedProduct = nullptr;
     shared_ptr<Store> selectedStore = nullptr;

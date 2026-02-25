@@ -22,12 +22,12 @@ void FileManager::saveDeliveries(const vector<Delivery>& deliveries, const strin
             << storeId << "|"
             << vehicleId << "|";
         const vector<DeliveryItem>& items = deliveryIterator->getItems();
-        for (vector<DeliveryItem>::const_iterator itemIt = items.begin(); itemIt != items.end(); ++itemIt)
+        for (vector<DeliveryItem>::const_iterator itemIterator = items.begin(); itemIterator != items.end(); ++itemIterator)
         {
-            if (itemIt->getProduct())
+            if (itemIterator->getProduct())
             {
-                file << itemIt->getProduct()->getProductId() << ":" << itemIt->getQuantity();
-                if (itemIt + 1 != items.end())
+                file << itemIterator->getProduct()->getProductId() << ":" << itemIterator->getQuantity();
+                if (itemIterator + 1 != items.end())
                 {
                     file << ",";
                 }
@@ -72,19 +72,19 @@ void FileManager::loadDeliveries(vector<Delivery>& deliveries, const vector<shar
         getline(ss, itemsPart);
         shared_ptr<Store> store = nullptr;
         shared_ptr<Vehicle> vehicle = nullptr;
-        for (auto it = stores.begin(); it != stores.end(); ++it)
+        for (auto storeIterator = stores.begin(); storeIterator != stores.end(); ++storeIterator)
         {
-            if ((*it)->getStoreId() == storeId)
+            if ((*storeIterator)->getStoreId() == storeId)
             {
-                store = *it;
+                store = *storeIterator;
                 break;
             }
         }
-        for (auto it = vehicles.begin(); it != vehicles.end(); ++it)
+        for (auto vehicleIterator = vehicles.begin(); vehicleIterator != vehicles.end(); ++vehicleIterator)
         {
-            if ((*it)->getVehicleId() == vehicleId)
+            if ((*vehicleIterator)->getVehicleId() == vehicleId)
             {
-                vehicle = *it;
+                vehicle = *vehicleIterator;
                 break;
             }
         }
@@ -102,11 +102,11 @@ void FileManager::loadDeliveries(vector<Delivery>& deliveries, const vector<shar
                     int productId = stoi(itemToken.substr(0, separatorPosition));
                     int quantity = stoi(itemToken.substr(separatorPosition + 1));
                     shared_ptr<Product> matchedProduct = nullptr;
-                    for (vector<shared_ptr<Product>>::const_iterator productIt = products.begin(); productIt != products.end(); ++productIt)
+                    for (vector<shared_ptr<Product>>::const_iterator productIterator = products.begin(); productIterator != products.end(); ++productIterator)
                     {
-                        if ((*productIt)->getProductId() == productId)
+                        if ((*productIterator)->getProductId() == productId)
                         {
-                            matchedProduct = *productIt;
+                            matchedProduct = *productIterator;
                             break;
                         }
                     }
@@ -124,11 +124,11 @@ void FileManager::loadDeliveries(vector<Delivery>& deliveries, const vector<shar
 void FileManager::saveDispatchQueue(const vector<DeliveryItem>& dispatchQueue, const string& fileName)
 {
     ofstream file(fileName);
-    for (vector<DeliveryItem>::const_iterator it = dispatchQueue.begin(); it != dispatchQueue.end(); ++it)
+    for (vector<DeliveryItem>::const_iterator iterator = dispatchQueue.begin(); iterator != dispatchQueue.end(); ++iterator)
     {
-        if (it->getProduct() && it->getStore())
+        if (iterator->getProduct() && iterator->getStore())
         {
-            file << it->getProduct()->getProductId() << "|" << it->getStore()->getStoreId() << "|" << it->getQuantity() << "\n";
+            file << iterator->getProduct()->getProductId() << "|" << iterator->getStore()->getStoreId() << "|" << iterator->getQuantity() << "\n";
         }
     }
 }
@@ -136,7 +136,10 @@ void FileManager::saveDispatchQueue(const vector<DeliveryItem>& dispatchQueue, c
 void FileManager::loadDispatchQueue(vector<DeliveryItem>& dispatchQueue, const vector<shared_ptr<Product>>& products, const vector<shared_ptr<Store>>& stores, const string& fileName)
 {
     ifstream file(fileName);
-    if (!file) return;
+    if (!file) 
+    {
+        return;
+    }
     dispatchQueue.clear();
     string line;
     while (getline(file, line))
@@ -154,19 +157,19 @@ void FileManager::loadDispatchQueue(vector<DeliveryItem>& dispatchQueue, const v
         quantity = stoi(token);
         shared_ptr<Product> matchedProduct = nullptr;
         shared_ptr<Store> matchedStore = nullptr;
-        for (auto pit = products.begin(); pit != products.end(); ++pit)
+        for (auto productIterator = products.begin(); productIterator != products.end(); ++productIterator)
         {
-            if ((*pit)->getProductId() == productId)
+            if ((*productIterator)->getProductId() == productId)
             {
-                matchedProduct = *pit;
+                matchedProduct = *productIterator;
                 break;
             }
         }
-        for (auto sit = stores.begin(); sit != stores.end(); ++sit)
+        for (auto storeIterator = stores.begin(); storeIterator != stores.end(); ++storeIterator)
         {
-            if ((*sit)->getStoreId() == storeId)
+            if ((*storeIterator)->getStoreId() == storeId)
             {
-                matchedStore = *sit;
+                matchedStore = *storeIterator;
                 break;
             }
         }

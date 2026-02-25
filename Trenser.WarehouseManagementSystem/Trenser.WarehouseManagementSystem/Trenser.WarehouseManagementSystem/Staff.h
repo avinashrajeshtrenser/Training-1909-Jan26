@@ -10,8 +10,6 @@ private:
 public:
 	Staff() : m_delivery() {}
 	Staff(int userId, std::string userName, std::string password) : User(userId, userName, password), m_delivery() {}
-	void performQualityCheck();
-	void acceptDelivery();
     std::string getRole() const override;
 };
 

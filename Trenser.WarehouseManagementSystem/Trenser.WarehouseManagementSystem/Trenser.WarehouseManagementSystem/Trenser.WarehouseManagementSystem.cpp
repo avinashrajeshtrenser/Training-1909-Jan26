@@ -3,8 +3,15 @@
 using namespace std;
 int main()
 {
-    WarehouseController* controller = new WarehouseController();
-    controller->loadSystem();
-    controller->controllerMenu();
+    try
+    {
+        WarehouseController* controller = new WarehouseController();
+        controller->loadSystem();
+        controller->controllerMenu();
+    }
+    catch (...)
+    {
+        cout << "Exception Occured.\n";
+    }
 }
 
